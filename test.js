@@ -4,33 +4,43 @@ require("dotenv").config();
 var keys = require("./keys.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(keys.mysql.CLEARDB_DATABASE_URL);
+var sequelize;
 
 describe("Sequelize Mysql Setup", function() {
+
+  before(function() {
+    // runs before all tests in this block
+    console.log('Before magical testing begins.');
+    sequelize = new Sequelize(keys.mysql.CLEARDB_DATABASE_URL);
+  });
+
+  after(function() {
+    // runs before all tests in this block
+    console.log('Closing connection');
+    sequelize.close();
+    // process.exit();
+  });
+
+
   describe("#authenticate()", function() {
-    it("should connect to mysql", function() {
-
-      const User = sequelize.define("user", {
-        firstName: {
-          type: Sequelize.STRING
-        },
-        lastName: {
-          type: Sequelize.STRING
-        },
-        test : {
-          type: Sequelize.STRING
-        }
+    it("should connect to mysql", function(done) {
+      const User = sequelize.define('user', {
+        username: Sequelize.STRING,
+        birthday: Sequelize.DATE
       });
-
-      // force: true will drop the table if it already exists
-      User.sync({ force: true }).then(() => {
-        // Table created
-        return User.create({
-          firstName: "John",
-          lastName: "Hancock",
-          test : "sdfadsf"
-        });
-      });
+      
+      sequelize.sync()
+        .then(() => User.create({
+          username: 'john doe',
+          birthday: new Date(1980, 6, 20)
+        }))
+        .then(jane => {
+          console.log(jane.toJSON());
+        })
+        .finally(done);
+      
     });
   });
 });
+
+
