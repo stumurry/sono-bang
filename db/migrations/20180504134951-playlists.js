@@ -6,11 +6,9 @@ module.exports = {
 };
 
 async function Up(queryInterface, Sequelize) {
-  await queryInterface.addColumn('playlist', 'name', { type: Sequelize.STRING });
- 
+  await queryInterface.addColumn('playlists', 'description', { type: Sequelize.STRING });
 }
 
 async function Down(queryInterface, Sequelize) {
-  await queryInterface.removeColumn('playlist', 'name');
- 
+  await queryInterface.removeColumn('playlists', 'description');
 }

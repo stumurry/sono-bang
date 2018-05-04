@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     location: DataTypes.STRING,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    primaryKey: true
   }, {});
   songs.associate = function(models) {
     // associations can be defined here

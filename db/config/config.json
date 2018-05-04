@@ -7,9 +7,9 @@
     "dialect": "mysql"
   },
   "test": {
+    "database": "sonobang",
     "username": "root",
     "password": "",
-    "database": "sonobang",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
