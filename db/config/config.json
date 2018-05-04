@@ -1,14 +1,14 @@
 {
   "development": {
     "username": "root",
-    "password": "Precip@22A",
+    "password": "",
     "database": "sonobang",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "Precip@22A",
+    "password": "",
     "database": "sonobang",
     "host": "127.0.0.1",
     "dialect": "mysql"
