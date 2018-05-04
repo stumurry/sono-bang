@@ -1,35 +1,39 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
-  "engines": {
-    "node": "8.9.1"
-  },
-  "main": "index.js",
+  "name": "express",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha"
+    "start": "node ./bin/www",
+    "test": "cd db; ../node_modules/.bin/sequelize db:migrate; cd ..; mocha 'tests/*.js'"
   },
-  "dependencies": {
-    "dotenv": "^5.0.1",
-    "ejs": "^2.5.6",
-    "express": "^4.15.2",
-    "mysql2": "^1.5.3",
-    "sequelize": "^4.37.6"
-  },
-  "devDependencies": {
-    "mocha": "^5.1.0",
-    "request": "^2.81.0",
-    "tape": "^4.7.0"
+  "directories": {
+    "test": "tests"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "git+https://github.com/stuartmurry/sonobang.git"
   },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
-  "license": "MIT"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stuartmurry/sonobang/issues"
+  },
+  "homepage": "https://github.com/stuartmurry/sonobang#readme",
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^5.0.1",
+    "express": "~4.16.0",
+    "hbs": "~4.0.1",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.37.6",
+    "sequelize-cli": "^4.0.0",
+    "aws-sdk": "^2.226.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.1"
+  }
 }

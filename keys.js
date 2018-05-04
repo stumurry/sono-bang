@@ -15,3 +15,7 @@ exports.spotify = {
 exports.mysql = {
   CLEARDB_DATABASE_URL : process.env.CLEARDB_DATABASE_URL
 }
+
+exports.environment = {
+  NODE_ENV : process.env.NODE_ENV
+}
