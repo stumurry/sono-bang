@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "",
+    "password": "japanxdhd777",
     "database": "sonobang",
     "host": "127.0.0.1",
     "dialect": "mysql"
@@ -9,7 +9,7 @@
   "test": {
     "database": "sonobang",
     "username": "root",
-    "password": "",
+    "password": "japanxdhd777",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
