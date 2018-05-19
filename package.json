@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha 'tests/*.js'"
+    "test": "run-script-os",
+    "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js", 
+    "test:darwin:linux": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha tests/*.js"
   },
-  "directories": {
+    "directories": {
     "test": "tests"
   },
   "repository": {
