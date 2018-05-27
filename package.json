@@ -5,10 +5,10 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "run-script-os",
-    "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js", 
+    "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js",
     "test:darwin:linux": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha tests/*.js"
   },
-    "directories": {
+  "directories": {
     "test": "tests"
   },
   "repository": {
@@ -33,9 +33,11 @@
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "mysql2": "^1.5.3",
+    "node-uuid": "^1.4.8",
+    "run-script-os": "^1.0.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
-    "run-script-os": "^1.0.3"
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "mocha": "^5.1.1"
