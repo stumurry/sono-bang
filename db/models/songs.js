@@ -4,7 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     location: DataTypes.STRING,
     description: DataTypes.STRING,
-    playlist_id : DataTypes.INTEGER
+    playlist_id : DataTypes.INTEGER,
+    fileName: DataTypes.STRING,
+    bucket: DataTypes.STRING,
+    key: DataTypes.STRING,
+
   }, {});
   songs.associate = function(db) {
     // associations can be defined here

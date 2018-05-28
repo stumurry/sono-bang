@@ -35,6 +35,12 @@ This project is a set of unit tests.  To run them, simply type in the following 
 
 `npm test`
 
+# Individual Tests
+
+Sometimes, to avoid clutter, one may want to individually test. Be careful to set timeout for long running tasks that last longer than 2 seconds.  npm test will set this flag, however, running indvidual tests, please set the `--timeout` in milliseconds otherwise for slow internet connections, your tests may fail.
+
+`mocha tests/aws/*.js --timeout 15000`
+
 Thats it!  That concludes the project.  Use this project as an example ORM for other projects.  Any question please feel free to ask!
 
 # Sequelize ORM
