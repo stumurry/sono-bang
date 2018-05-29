@@ -120,9 +120,11 @@ describe("/composer", function() {
         testsong,
         fName
       )
-        .then(s => (song = s))
-        .then(s => testDBProperties(s, testsong))
-        .then(s => testKeyNomenclature(testsong, salt))
+        .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
+        .then(_ => testDBProperties(song, testsong))
+        .then(_ => testKeyNomenclature(testsong, salt))
+        .then(_ => console.log(song))
+        .then(_ => AmazonService.DeleteFile(song.key)) // Done uploading, now delete it.
         .then(_ => done())
         .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
     });

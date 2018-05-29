@@ -12,7 +12,7 @@ describe("AWS", function() {
     it("should list bucket contents", function(done) {
       // testDeleteBucketContents()
       // testGetFiles()
-      testListFiles()
+      testListFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
       // testUploadFile()
       // listLocalFilesFromDirectory()
         .then(_ => console.log(_))
@@ -77,7 +77,6 @@ async function testDeleteBucketContents() {
   var files = await aws.ListFiles();
 
   files["Contents"].forEach(async f => {
-    var file = { Bucket: "sonobang-test", Key: f.Key };
-    await aws.DeleteFile(file);
+    await aws.DeleteFile(f.Key);
   });
 }

@@ -13,7 +13,7 @@ inside root project folder.  This file will not be checked in for security purpo
 Add the following line:
 
 ```
-CLEARDB_DATABASE_URL=mysql://root@localhost:3306/bamazon?reconnect=true
+CLEARDB_DATABASE_URL=mysql://root@localhost:3306/sonobang?reconnect=true
 
 #Enable Drop and recreate tables when unit tests are run (this will override to `test` when unit test are executing)
 NODE_ENV=development;
@@ -23,7 +23,7 @@ Save the file.
 
 Be sure to have mysql server up and running.  On Mac its `mysql.server start`.  If you plan on doing development, its advisable to run Mysql as a service and keep it on all the time.  Otherwise, you have to start up this service everytime you need to test.
 
-With your favorite Mysql IDE, create a schema called `bamazon` 
+With your favorite Mysql IDE, create a schema called `sonobang` 
 
 Install of the dependencies for this project.
 
@@ -41,11 +41,25 @@ Sometimes, to avoid clutter, one may want to individually test. Be careful to se
 
 `mocha tests/aws/*.js --timeout 15000`
 
-Thats it!  That concludes the project.  Use this project as an example ORM for other projects.  Any question please feel free to ask!
-
 # Sequelize ORM
 
-Sequelize is used to simplify Mysql wrapping.  These tools simplify reading, writing, updating and deleting data from database.  The Sequelize-cli provides a tool to simplify writing boiler plate code used in Sequelize operation esecailly for `migrations`.  Whenever its needed to add a field to a table, one should use this cli than to edit Mysql directly.  That way, when someone checks in this code, the other developers Mysql instances are automatically synched when the test runs. Instead of trying to memorize sequelize, its easier to execute a few command via Command-Line. Here are some reminder steps in order for command line syntax:
+Sequelize is used to simplify Mysql wrapping.  These tools simplify reading, writing, updating and deleting data from database.  The Sequelize-cli provides a tool to simplify writing boiler plate code used in Sequelize operation esecailly for `migrations`.  Whenever its needed to add a field to a table, one should use this cli rather than to edit Mysql directly.  That way, when someone checks in their code, the other developer's Mysql instances are automatically synched when the test runs. Instead of trying to memorize sequelize, its easier to execute a few command via Command-Line. Also, if there is a problem with the database schema, simple drop and recreate the schema:
+
+```
+
+drop database sonobang
+
+create database sonobang
+
+npm test
+
+```
+
+The database tables should automatically regenerate and your tests should pass.
+
+
+
+Here are some reminder steps in order for command line syntax:
 
 Before doing any CLI, please refer to this link for further instructions:
 
@@ -96,6 +110,9 @@ To commit seed data to Database
 ```
 ../node_modules/.bin/sequelize db:seed:all
 ```
+
+
+Thats it!  That concludes the project.  Use this project as an example ORM for other projects.  Any question please feel free to ask!
 
 
 

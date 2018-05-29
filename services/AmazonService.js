@@ -69,11 +69,14 @@ module.exports = {
   },
 
   // var file = { Bucket: "sonobang-test", Key: f.Key };
-  DeleteFile: async function(file) {
+  DeleteFile: async function(key) {
     // Require promise here instead of async because AWS-SDK uses
     // old school callback pattern instead of returning a Promise
     return new Promise((resolve, reject) => {
-      s3.deleteObject(file, function(err, data) {
+      console.log('Deleting Object');
+      console.log('key')
+      console.log(key)
+      s3.deleteObject({ Key : key, Bucket :  bucket}, function(err, data) {
         if (err) {
           reject(err);
         } // an error occurred
