@@ -1,3 +1,4 @@
+require("dotenv").config();
 
 exports.twitter = {
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -17,4 +18,10 @@ exports.mysql = {
 
 exports.environment = {
   NODE_ENV : process.env.NODE_ENV
+}
+
+
+exports.encryption = {
+  algorithm : process.env.CRYPTO_ALGORITHM,
+  password : process.env.CRYPTO_PASSWORD,
 }

@@ -5,7 +5,7 @@ var ComposerService = require("../services/ComposerService");
 var AmazonService = require("../services/AmazonService");
 const db = require("../db/models");
 var uuid = require("node-uuid");
-const path = require('path');
+const path = require("path");
 const fs = require("fs");
 
 describe("/composer", function() {
@@ -71,14 +71,37 @@ describe("/composer", function() {
       var c = {
         name: "Test Composer",
         description:
-          "A music song writer specializing in motion picture themes."
+          "A music song writer specializing in motion picture themes.",
+        username: "stu",
+        password: "stu", // test using HMAC encryption later.
+        email : "stu@sss.com",
+        homepage : 'http://helloworld.com'
       };
 
       ComposerService.CreateComposer(c)
-        .then(cc => (composer = cc))
+        .then(cc => (composer = cc.composer, user = cc.user))
+        .then(_ => testDBUser(user, c))
+        .then(_ => testDBComposer(composer, c))
         .then(_ => done())
         .catch(_ => done(_)); // Alert Mocha to fail test upon thrown exceptions
     });
+
+    async function testDBUser(user, testuser) {
+      var errorMsg =
+        " property not found. Use Sequelize CLI to create a new migration and insert this field.";
+      expect(user.name).to.equal(testuser.name, "name" + errorMsg);
+      expect(user.password).to.equal(testuser.password, "password" + errorMsg);
+      expect(user.username).to.equal(testuser.username, "username" + errorMsg);
+      expect(user.email).to.equal(testuser.email, "email" + errorMsg);
+    }
+    async function testDBComposer(composer, c) {
+      var errorMsg =
+        " property not found. Use Sequelize CLI to create a new migration and insert this field.";
+      expect(composer.name).to.equal(composer.name, "name" + errorMsg);
+      expect(composer.description).to.equal(composer.description, "description" + errorMsg);
+      expect(composer.homepage).to.equal(composer.homepage, "homepage" + errorMsg);
+      expect(composer.user_id).is.greaterThan(0, "Composer's user_id should be greater than 0");
+    }
 
     it("should be able to create a playlist", function(done) {
       var testplaylist = {
@@ -94,7 +117,6 @@ describe("/composer", function() {
     });
 
     it("should be able to add song to playlist", function(done) {
-
       var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";
 
       var fileName = path.basename(fName);
@@ -104,7 +126,7 @@ describe("/composer", function() {
 
       // Form Data supplied by Composer
       var testsong = {
-        name: "HAYDN \"CONCERTO D-MAJOR\"",
+        name: 'HAYDN "CONCERTO D-MAJOR"',
         fileName: fileName,
         bucket: "sonobang-test", // bucket name
         description: "REINER HOCHMUTH CELLIST"
