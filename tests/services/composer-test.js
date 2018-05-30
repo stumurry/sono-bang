@@ -1,9 +1,9 @@
 process.env.NODE_ENV = "test";
 
 var { expect, assert } = require("chai");
-var ComposerService = require("../services/ComposerService");
-var AmazonService = require("../services/AmazonService");
-const db = require("../db/models");
+var ComposerService = require("../../services/ComposerService");
+var AmazonService = require("../../services/AmazonService");
+const db = require("../../db/models");
 var uuid = require("node-uuid");
 const path = require("path");
 const fs = require("fs");

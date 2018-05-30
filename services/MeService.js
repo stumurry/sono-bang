@@ -1,13 +1,8 @@
 const db = require('../db/models')
 
-module.exports = function() {
-  var MeService = {
-    // Testing purposes only.
-    Disconnect: function() {
-      console.log("Closing connection...");
-      db.sequelize.close();
-    }
-  };
-
-  return MeService;
+module.exports = {
+  // Testing purposes only.
+  Disconnect: function() {
+    return db.sequelize.close();
+  }
 };

@@ -6,17 +6,20 @@ var logger = require('morgan');
 const fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var playListRouter = require('./routes/playlist');
-var loginRouter = require('./routes/login');
+
+// Test
 var uploadRouter = require('./routes/upload');
+
+var composerRouter = require('./routes/composer');
+var meRouter = require('./routes/me');
+var producerRouter = require('./routes/producer');
+
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
 
 app.use(fileUpload());
 app.use(logger('dev'));
@@ -25,11 +28,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// views
 app.use('/', indexRouter);
-app.use('/playlist', playListRouter)
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
+
+// Little Test
 app.use('/upload', uploadRouter);
+
+app.use('/composer', composerRouter);
+app.use('/producer', producerRouter);
+app.use('/me', meRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
