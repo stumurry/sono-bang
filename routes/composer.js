@@ -13,7 +13,6 @@ router.get('/:id', function(req, res, next) {
         res.redirect('/me/login');
     }
 
-    
 });
 router.get('/', function(req, res, next) {
     res.redirect('/me/login');

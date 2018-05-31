@@ -38,6 +38,7 @@
     "morgan": "~1.9.0",
     "mysql2": "^1.5.3",
     "node-uuid": "^1.4.8",
+    "nodemailer": "^4.6.5",
     "run-script-os": "^1.0.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
