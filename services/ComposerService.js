@@ -33,6 +33,22 @@ module.exports = {
     }
 
   },
+
+  GetComposer: async (username, password) => {
+
+    var user = await db.users.findOne({ where: { username: username, password : password} });
+
+    var composer = await db.composers.findOne( { where  : { user_id : user.id }});
+
+    return {
+      composer : composer,
+      user : user,
+    }
+  },
+
+
+
+
   CreatePlayList: async function(composer, playlist) {
     playlist.composer_id = composer.id;
     return await db.playlists.create(playlist);

@@ -15,6 +15,7 @@ const amazonService = require("../services/AmazonService");
 const composerService = require("../services/ComposerService");
 const meService = require("../services/MeService");
 const producerService = require("../services/ProducerService");
+const composerUtil = require('../utils/ComposerUtil');
 
 module.exports = {
     amazonService : amazonService,
@@ -30,5 +31,6 @@ module.exports = {
     app : app,
     meService : meService,
     db : db,
-    producerService : producerService
+    producerService : producerService,
+    composerUtil : composerUtil,
 }

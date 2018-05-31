@@ -1,0 +1,658 @@
+<style>
+    /***** GLOBAL STYLES *****/
+body {
+    padding-top: 54px;
+    background-image: url("bg_diamond.png");
+    height: 100%;
+  }
+
+  .logo {
+    color: #714256;
+    font-weight: bold;
+  }
+
+  nav a {
+    border-radius: 5px;
+  }
+
+  nav a:hover {
+    background: #79b6b8;
+    font-weight: bold;
+    color: #fff !important;
+    border-radius: 5px;
+  }
+
+  .uk-active a {
+    font-weight: bold;
+  }
+
+
+
+  /***** LIBRARY-PLAYLIST PAGE *****/
+
+  .addButton {
+    border: #714256 1px solid !important;
+    border-radius: 3px;
+    background: #714256 !important;
+    color: #fff;
+  }
+
+  .addButton:hover {
+    color: #fff;
+    background: #ef8321 !important;
+  }
+
+  th {
+    color: #714256 !important;
+    font-weight: 500 !important;
+  }
+
+  td button {
+    border: #714256 1px solid !important;
+    border-radius: 3px !important;
+    margin-right: 10px !important;
+    background: rgba(121, 182, 184, 0.5) !important;
+  }
+
+  .delete {
+    padding: 0 7px;
+  }
+
+  .delete:hover {
+    background: rgb(226, 68, 68) !important;
+  }
+
+  td button:hover {
+    border-color: #714256 !important;
+    background: #ef8321 !important;
+    border-radius: 3px;
+  }
+
+  td a {
+    padding: 3px !important;
+  }
+
+  td a:hover {
+    background: #ef8321;
+    color: #714256 !important;
+    border-radius: 3px;
+    padding: 3px;
+  }
+
+  .play-icon {
+    margin-right: 10px;
+  }
+
+  tr {
+    border-top-color: #ef8321 !important; 
+  }
+
+  #send-playlist p,
+  #send-playlist h2 {
+    color: #fff;
+    text-align: center;
+  }
+
+  .uk-modal-body {
+    background: #714256;
+  }
+
+  .modal-dragDrop {
+    color: #fff;
+    font-size: 16pt;
+  }
+
+  .uk-modal-body label {
+    color: #fff;
+    font-weight: bold;
+    font-size: 16pt;
+  }
+
+  .uk-modal-body button {
+    background: #79b6b8;
+    border-radius: 3px;
+    font-size: 14pt;
+  }
+
+  .modal-dragDrop button {
+    margin-top: 25px;
+  }
+
+  
+  .uk-modal-body button:hover {
+    background: #ef8321;
+  }
+
+  .nub:hover {
+    font-weight: bolder;
+  }
+
+  .card-BG {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  
+
+  /***** PRICING PAGE *****/
+
+  
+    
+    header {
+        text-align: center;
+        margin-bottom: 25px;
+        padding: 50px 0;
+    }
+
+    header h2 {
+        font-weight: bold;
+        color: #714256;
+        font-size: 36pt;
+    }
+
+    .columns {
+        box-sizing: border-box;
+        float: left;
+        width: 33.3%;
+        padding: 18px;
+    }
+
+    .columns li {
+        background: #fff;
+    }
+
+    .price {
+        list-style-type: none;
+        border: 2px #714256 solid;
+        margin: 0;
+        padding: 0;
+        -webkit-transition: 0.3s;
+        transition: 0.3s;
+    }
+
+    .price:hover {
+        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .price .package {
+        background-color: #714256;
+        border-bottom: #714256;
+        color: #fff;
+        font-size: 25px;
+    }
+
+    .price li {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .price .grey {
+        background-color: #79b6b8;
+        font-size: 20px;
+        font-weight: 500;
+        color: #714256;
+    }
+
+    .button {
+        background-color: #ef8321;
+        border: 1px #714256 solid;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 25px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    a:hover {
+        text-decoration: none;
+        background: #714256;
+        color: #fff;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .columns {
+            width: 100%;
+        }
+    }
+
+
+    /***** CONTACT *****/
+
+    .container {
+      margin: 10px 100px;
+    }
+
+
+    /***** PROFILE *****/
+
+    .uk-card {
+      margin-top: 100px;
+    }
+</style>
+
+
+<div>
+    <div class="uk-position-top">
+        <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a href="#">My Account</a>
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li class="uk-active">
+                                    <a href="#">Library</a>
+                                </li>
+                                <li>
+                                    <a href="#">Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<h1 class="uk-heading-bullet uk-text-center logo">SONO-BANG</h1>
+<hr class="uk-divider-small">
+<div class="uk-child-width-1-2@m uk-grid-match" uk-grid>
+    <div>
+        <div class="uk-card uk-card-default uk-card-body card-BG" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
+            <h3 class="uk-card-title">Your Songs</h3>
+            <h3 class="uk-card-title"></h3>
+
+            <button class='uk-button uk-button-default addButton' type='button' uk-toggle='target:#add-songs'>Add Songs</button>
+
+            <div id='add-songs' uk-modal>
+                <div class='uk-modal-dialog uk-modal-body'>
+
+                    <form class="uk-form-stacked">
+
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Song Name</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="form-stacked-text" type="text">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Genre</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="form-stacked-text" type="text">
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="js-upload uk-placeholder uk-text-center modal-dragDrop">
+                        <span uk-icon="icon: cloud-upload"></span>
+                        <span class="uk-text-middle">To add song -- drag & drop here or</span>
+                        <div uk-form-custom>
+                            <input type="file" multiple>
+                            <!-- <span class="uk-link">select from file</span> -->
+                            <button class="uk-button uk-button-primary dragDrop-button nub" type="button">Select song from file</button>
+
+                        </div>
+
+                    </div>
+                    <button class="uk-button uk-button-primary" type="button">Add Song</button>
+
+
+                    <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+
+                    <script>        
+                        var bar = document.getElementById('js-progressbar');
+                        UIkit.upload('.js-upload', {
+
+                            url: '',
+                            multiple: true,
+
+                            beforeSend: function () {
+                                console.log('beforeSend', arguments);
+                            },
+                            beforeAll: function () {
+                                console.log('beforeAll', arguments);
+                            },
+                            load: function () {
+                                console.log('load', arguments);
+                            },
+                            error: function () {
+                                console.log('error', arguments);
+                            },
+                            complete: function () {
+                                console.log('complete', arguments);
+                            },
+                            loadStart: function (e) {
+                                console.log('loadStart', arguments);
+                                bar.removeAttribute('hidden');
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+                            progress: function (e) {
+                                console.log('progress', arguments);
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+                            loadEnd: function (e) {
+                                console.log('loadEnd', arguments);
+                                bar.max = e.total;
+                                bar.value = e.loaded;
+                            },
+                            completeAll: function () {
+                                console.log('completeAll', arguments);
+                                setTimeout(function () {
+                                    bar.setAttribute('hidden', 'hidden');
+                                }, 1000);
+
+                                alert('Upload Completed');
+                            }
+                        });        
+                    </script>
+
+
+
+
+                </div>
+            </div>
+
+
+
+            <table class="uk-table uk-table-justify uk-table-divider">
+                <thead>
+                    <tr>
+                        <th class="uk-width-small">Song</th>
+                        <th>Genre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Table Data</td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="uk-card uk-card-default uk-card-body card-BG" uk-scrollspy="cls: uk-animation-slide-right; repeat: true">
+            <h3 class="uk-card-title">Created Playlists</h3>
+            <h3 class="uk-card-title"></h3>
+            <button class='uk-button uk-button-default addButton' type='button' uk-toggle='target:#new-playlist'>New Playlist</button>
+            
+            <div id='new-playlist' uk-modal>
+                <div class='uk-modal-dialog uk-modal-body'>
+                    <form action="/composer/playlist" method="post" class="uk-form-stacked" >
+                        <input type="hidden" value="{{key}}" name="key" />
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Playlist Name</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" type="text" name="name" >
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Genre</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" type="text" name="genre">
+                            </div>
+                        </div>
+                        <button class="uk-button uk-button-primary" type="submit" >Create Playlist</button>
+                    </form>
+                </div>
+            </div>
+            <table class="uk-table uk-table-justify uk-table-divider">
+                <thead>
+                    <tr>
+                        <th class="uk-width-small">Playlist Name</th>
+                        <th>Genre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                    <tr uk-accordion>
+                        <td class="uk-closed">
+                            <a class="uk-accordion-title" href="#">Playlist</a>
+                            <div class="uk-accordion-content">
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                <p>
+                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                            </div>
+                        </td>
+                        <td>Genre Type</td>
+                        <td uk-margin>
+                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id='send-playlist' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <h2>Copy this hyperlink</h2>
+        <p>http://www.sonobang.com/person/playlist</p>
+        <!-- <form class="uk-form-stacked">
+                        <div class="uk-margin uk-align-center">
+                                <label class="uk-form-label" id ='playlist-name' for="form-stacked-text"></label>
+                                
+                            </div>
+     
+                    <div class="uk-margin">
+                        <label class="uk-form-label" id ='recipient' for="form-stacked-text">Recipient</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="form-stacked-text" type="text" placeholder="Who are you trying to impress?">
+                        </div>
+                    </div>
+                    
+                    <div class="uk-margin">
+                        <label class="uk-form-label" id='message' for="form-stacked-text">Message</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="form-stacked-text" type="text" placeholder="Make it simple and sweet.">
+                        </div>
+                    </div>
+     
+     
+     
+                    <button class="uk-button uk-button-primary" type="button">Send playlist</button>
+     
+                </form> -->
+
+                <script>
+                    var key = '{{ key }}';
+                    function CreatePlaylist() {
+                        console.log(key);
+                        console.log($('#NewPlaylist-Name').val());
+                        console.log($('#NewPlaylist-Genre').val());
+                        //alert('Creating Playlist');
+                        
+                    }
+                </script>
+    </div>
+</div>

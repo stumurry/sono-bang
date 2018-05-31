@@ -6,9 +6,9 @@ var crypto = require("crypto"),
 
 var ComposerUtil = {
   encrypt: function(text) {
-
+    var message = JSON.stringify(text);
     var cipher = crypto.createCipher(algorithm, password);
-    var crypted = cipher.update(text, "utf8", "hex");
+    var crypted = cipher.update(message, "utf8", "hex");
     crypted += cipher.final("hex");
     return crypted;
   },
@@ -17,7 +17,7 @@ var ComposerUtil = {
     var decipher = crypto.createDecipher(algorithm, password);
     var dec = decipher.update(text, "hex", "utf8");
     dec += decipher.final("utf8");
-    return dec;
+    return JSON.parse(dec);
   }
 };
 

@@ -35,6 +35,10 @@ This project is a set of unit tests.  To run them, simply type in the following 
 
 `npm test`
 
+Run Seed Data(Optional)
+
+`../node_modules/.bin/sequelize db:seed:all`
+
 # Individual Tests
 
 Sometimes, to avoid clutter, one may want to individually test. Be careful to set timeout for long running tasks that last longer than 2 seconds.  npm test will set this flag, however, running indvidual tests, please set the `--timeout` in milliseconds otherwise for slow internet connections, your tests may fail.
@@ -103,7 +107,7 @@ As time goes by, multiple developers will need to make changes to the same table
 Seed data is initial data that is inserted into the database
 
 ```
-../node_modules/.bin/sequelize seed:generate --name bamazon-mock-products
+../node_modules/.bin/sequelize seed:generate --name composer-user
 ```
 
 To commit seed data to Database

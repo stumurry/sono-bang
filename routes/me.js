@@ -3,46 +3,52 @@ var router = express.Router();
 const { check, validationResult } = require("express-validator/check");
 const { matchedData, sanitize } = require("express-validator/filter");
 
-var Composer = require("../services/ComposerService");
+const composerService = require("../services/ComposerService");
+const composerUtil = require("../utils/ComposerUtil");
 
-router.get("/login",(req, res, next) => {
-    res.render("login", {  });
-}); 
 
-router.post("/login",
-    [
-      check("username")
-        .isLength({ min: 1 }),
-
-      check(
-        "password",
-        "please enter a password"
-      )
-        .isLength({ min: 5 }),
-    ],
-    (req, res, next) => {
-      console.log(req.body);
-      // offer back door while testing...
-      if (req.body.username === 'test' && req.body.password==='test') {
-        return res.redirect('/composer/test');
-      }
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        // console.log(errors.mapped());
-        // console.log(req.body)
-        return res
-          .status(422)
-          .render("register", { errors: errors.mapped(), body: req.body });
-      }
-      return res.redirect('/composer');
-    }
-  );
-
-router.get("/register", (req, res, next) => {
-  res.render("register", { });
+router.get("/login", (req, res, next) => {
+  res.render("login", {});
 });
 
-router.post("/register",
+router.post(
+  "/login",
+  [
+    check("username").isLength({ min: 1 }),
+    check("password", "please enter a password").isLength({ min: 5 })
+  ],
+  (req, res, next) => {
+    console.log("start validating...");
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log("errors...");
+      console.log(errors.mapped());
+      // console.log(errors.mapped());
+      // console.log(req.body)
+      return res
+        .status(422)
+        .render("login", { errors: errors.mapped(), body: req.body });
+    }
+
+    return composerService
+      .GetComposer(req.body.username, req.body.password)
+      .then(_ => { return composerUtil.encrypt(_)} )
+      .then(_ => res.redirect("/composer/" + _) )
+      .catch(_ => {
+        return res
+          .status(400)
+          .render("login", { errors: errors.mapped(), body: req.body });
+      }); // Server Error
+  }
+);
+
+router.get("/register", (req, res, next) => {
+  res.render("register", {});
+});
+
+router.post(
+  "/register",
   [
     check("username")
       // Every validator method in the validator lib is available as a
@@ -70,8 +76,7 @@ router.post("/register",
       .isLength({ min: 5 })
       .matches(/\d/),
 
-    check("name","a name must be supplied")
-    .isLength({ min: 1 })
+    check("name", "a name must be supplied").isLength({ min: 1 })
   ],
   (req, res, next) => {
     // Get the validation result whenever you want; see the Validation Result API for all options!

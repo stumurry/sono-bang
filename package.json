@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "test": "run-script-os",
     "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js --timeout 15000",
-    "test:darwin:linux": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha tests/*.js --timeout 15000"
+    "test:darwin:linux": "cd db && ../node_modules/.bin/sequelize db:migrate && cd .. && mocha tests/*.js --timeout 15000"
   },
   "directories": {
     "test": "tests"
@@ -28,6 +28,7 @@
     "chai-http": "^4.0.0",
     "cookie-parser": "~1.4.3",
     "crypto": "^1.0.1",
+    "crypto-json": "^2.0.0",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "express": "~4.16.0",
