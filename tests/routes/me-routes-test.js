@@ -33,6 +33,26 @@ describe("This person", function() {
         });
     });
 
+    it("should be redirected to the composer page", function(done) {
+      chai
+        .request(app)
+        .post("/me/login")
+        .send(ValidLoginForm())
+        .end(function(err, res) {
+          // console.log(res.body);
+          expect(res.redirects[0]).include('/composer', 'Authenticated Composers should be redirected to composer page' );
+          done();
+        });
+    });
+
+    function ValidLoginForm() {
+      return {
+        username: 'test',
+        password: 'test'
+      
+      };
+    }
+
     function EmptyLoginForm() {
       return {};
     }

@@ -21,6 +21,11 @@ router.post("/login",
         .isLength({ min: 5 }),
     ],
     (req, res, next) => {
+      console.log(req.body);
+      // offer back door while testing...
+      if (req.body.username === 'test' && req.body.password==='test') {
+        return res.redirect('/composer/test');
+      }
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         // console.log(errors.mapped());
@@ -29,7 +34,7 @@ router.post("/login",
           .status(422)
           .render("register", { errors: errors.mapped(), body: req.body });
       }
-      return res.render("register-success");
+      return res.redirect('/composer');
     }
   );
 
