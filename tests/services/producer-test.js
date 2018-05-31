@@ -1,7 +1,4 @@
-process.env.NODE_ENV = "test";
-
-var expect = require("chai").expect;
-var ComposerService = require("../services/ProducerService");
+var { producerService, chai, app, expect, path, uuid } = require("../common");
 
 describe("/producer", function() {
   // Need to connect before executing queries
@@ -12,7 +9,7 @@ describe("/producer", function() {
   after(function() {
     // ** Test Purposes only **  Locked connection with Mysql will cause unit tests to hang.
     // Disconnect before killing thread.
-    ProducerService.Disconnect();
+    producerService.Disconnect();
   });
 
 });

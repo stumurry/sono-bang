@@ -1,11 +1,4 @@
-require("dotenv").config();
-const keys = require("../../keys.js");
-const aws = require("../../services/AmazonService");
-const fs = require("fs");
-const uuid = require("node-uuid");
-const path = require('path');
-
-var { expect, assert } = require("chai");
+const { fs, aws } = require("../common");
 
 describe("AWS", function() {
   describe("#S3", function() {

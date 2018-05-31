@@ -1,22 +1,25 @@
-var assert = require("assert");
+var { composerService, chai, app, expect } = require("../common");
 
-var composerService = require("../services/ComposerService");
-
-var app = require("../../app");
-
-describe("Composer Routes", function() {
-  after(function() {
-    composerService.Disconnect();
+describe("UnAuthenticated Persons", function() {
+  after((done) => {
+    composerService
+    .Disconnect()
+    .catch(_ => done()) // ignore error
+    .then(() => done())
   });
 
-  // ** done() ** - Wait for database operation to finish
-  it("should be able to create a composer", function(done) {
-    // chai
-    //   .request(app)
-    //   .get("/me/register")
-    //   .end(function(err, res) {
-    //     expect(res).to.have.status(200);
-    //     done();
-    //   });
+  // 401 - Not Authenticated
+  // 403 - Not Authorized
+  it("should be forced to login", function(done) { // done() use w/ promises
+    chai
+      .request(app)
+      .get("/composer")
+      .end(function(err, res) {
+        console.log('res.headers');
+        console.log(res);
+        expect(res.redirects[0]).include('/me/login', 'UnAuthenticated users should be redirected to login page' );
+        done();
+      });
   });
+  
 });

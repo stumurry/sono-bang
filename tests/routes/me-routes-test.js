@@ -1,46 +1,71 @@
-var chai = require("chai");
-var { request, expect, assert } = require("chai");
-let chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-
-var meService = require("../../services/MeService");
-
-var app = require("../../app");
+var { meService, chai, app, expect } = require("../common");
 
 describe("This person", function() {
-  after((done) => {
+  after(done => {
     meService
-    .Disconnect()
-    .catch(_ => _)
-    .then(() => done())
+      .Disconnect()
+      .catch(_ => done())
+      .then(() => done());
   });
 
-  // ** done() ** - Wait for database operation to finish
-  it("should be able to see registration form", function(done) {
-    chai
-      .request(app)
-      .get("/me/register")
-      .end(function(err, res) {
-        expect(res).to.have.status(200);
-        done();
-      });
+  describe("##### who logs in #########", function() {
+    // Login
+    it("should be able to see login form", function(done) {
+      // done() use w/ promises
+      chai
+        .request(app)
+        .get("/me/login")
+        .end(function(err, res) {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+    // Login
+    it("should be able to validate a login form", function(done) {
+      chai
+        .request(app)
+        .post("/me/login")
+        .send(EmptyLoginForm())
+        .end(function(err, res) {
+          // console.log(res.body);
+          expect(res).to.have.status(422);
+          done();
+        });
+    });
+
+    function EmptyLoginForm() {
+      return {};
+    }
   });
 
-  it("should be able to submit this registration form", function(done) {
-    chai
-      .request(app)
-      .post("/me/register")
-      .send(SampleRegistrationForm())
-      .end(function(err, res) {
-        console.log(res.body);
-        expect(res).to.have.status(200);
-        done();
-      });
+  describe("##### who registers #########", function() {
+    // Register
+    it("should be able to see registration form", function(done) {
+      chai
+        .request(app)
+        .get("/me/register")
+        .end(function(err, res) {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+
+    // Register
+    it("should be able to validate a registration form", function(done) {
+      chai
+        .request(app)
+        .post("/me/register")
+        .send(EmptyRegistrationForm())
+        .end(function(err, res) {
+          // console.log(res.body);
+          expect(res).to.have.status(422);
+          done();
+        });
+    });
+    function EmptyRegistrationForm() {
+      return {};
+    }
   });
 
-  function SampleRegistrationForm() {
-      return {
-          username : 'world'
-      }
-  }
+  
 });

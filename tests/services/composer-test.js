@@ -1,12 +1,4 @@
-process.env.NODE_ENV = "test";
-
-var { expect, assert } = require("chai");
-var ComposerService = require("../../services/ComposerService");
-var AmazonService = require("../../services/AmazonService");
-const db = require("../../db/models");
-var uuid = require("node-uuid");
-const path = require("path");
-const fs = require("fs");
+var { composerService, chai, app, expect, path, amazonService, uuid } = require("../common");
 
 describe("/composer", function() {
   // Need to connect before executing queries
@@ -17,7 +9,7 @@ describe("/composer", function() {
   after(function() {
     // ** Test Purposes only **  Locked connection with Mysql will cause unit tests to hang.
     // Disconnect before killing thread.
-    ComposerService.Disconnect();
+    composerService.Disconnect();
   });
 
   //https://trello.com/c/gBww47fn/21-as-a-composer-i-should-be-able-to-edit-my-playlist
@@ -38,16 +30,16 @@ describe("/composer", function() {
       // then a `Foreign Key Violation` will happen and your application will blow up.
       var promiseChain = [];
       if (S3Object) {
-        promiseChain.push(AmazonService.DeleteFile(S3Object));
+        promiseChain.push(amazonService.DeleteFile(S3Object));
       }
       if (song) {
-        promiseChain.push(ComposerService.RemoveSong(song));
+        promiseChain.push(composerService.RemoveSong(song));
       }
       if (playlist) {
-        promiseChain.push(ComposerService.RemovePlaylist(playlist));
+        promiseChain.push(composerService.RemovePlaylist(playlist));
       }
       if (composer) {
-        promiseChain.push(ComposerService.RemoveComposer(composer));
+        promiseChain.push(composerService.RemoveComposer(composer));
       }
 
       ExecutePromiseChain(promiseChain).then(_ => done()); // Signal Mocha to wait for promise chain to finish before disconnecting database.
@@ -78,7 +70,7 @@ describe("/composer", function() {
         homepage : 'http://helloworld.com'
       };
 
-      ComposerService.CreateComposer(c)
+      composerService.CreateComposer(c)
         .then(cc => (composer = cc.composer, user = cc.user))
         .then(_ => testDBUser(user, c))
         .then(_ => testDBComposer(composer, c))
@@ -108,10 +100,10 @@ describe("/composer", function() {
         name: "Stu's custom playlist# 1",
         description: "A playlist I designed for a potential producer."
       };
-      ComposerService.CreatePlayList(composer, testplaylist)
+      composerService.CreatePlayList(composer, testplaylist)
         .then(p => (playlist = p))
         .then(console.log("creating playlist"))
-        .then(async p => console.log(await AmazonService.ListFiles("" + p.id)))
+        .then(async p => console.log(await amazonService.ListFiles("" + p.id)))
         .then(_ => done())
         .catch(_ => done(_));
     });
@@ -135,7 +127,7 @@ describe("/composer", function() {
       // S3 buckets offers only a `prefix` attribute for seaching.
       // S3 limits the number of buckets you can create and uses a Global Namespace.
       // We need a way to tie this file to a database entry.
-      ComposerService.AddSongToPlayList(
+      composerService.AddSongToPlayList(
         salt,
         composer,
         playlist,
@@ -146,7 +138,7 @@ describe("/composer", function() {
         .then(_ => testDBProperties(song, testsong))
         .then(_ => testKeyNomenclature(testsong, salt))
         .then(_ => console.log(song))
-        .then(_ => AmazonService.DeleteFile(song.key)) // Done uploading, now delete it.
+        .then(_ => amazonService.DeleteFile(song.key)) // Done uploading, now delete it.
         .then(_ => done())
         .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
     });
@@ -180,7 +172,7 @@ describe("/composer", function() {
         prefix + "-" + composer.id + "-" + salt + "-" + testsong.fileName;
       console.log("testKeyNomenclature");
       console.log(key);
-      var files = await AmazonService.ListFiles(prefix);
+      var files = await amazonService.ListFiles(prefix);
 
       console.log(files["Contents"]);
 
@@ -192,7 +184,7 @@ describe("/composer", function() {
 
     it("should be able to list songs in a playlist", function(done) {
       var hasException = false;
-      ComposerService.ListSongsInPlayList(playlist)
+      composerService.ListSongsInPlayList(playlist)
         .then(songs => {
           // Songs should have references to boh playlist and composer
           var list = songs.filter(x => x.playlist_id == playlist.id);
@@ -206,7 +198,7 @@ describe("/composer", function() {
     });
 
     it("should be able to remove song from playlist", function(done) {
-      ComposerService.RemoveSong(song)
+      composerService.RemoveSong(song)
         .then(_ => done())
         .catch(_ => done(_));
     });

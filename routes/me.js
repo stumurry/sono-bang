@@ -5,14 +5,39 @@ const { matchedData, sanitize } = require("express-validator/filter");
 
 var Composer = require("../services/ComposerService");
 
-router.get("/register", function(req, res, next) {
-  res.render("register", { title: "Express" });
+router.get("/login",(req, res, next) => {
+    res.render("login", {  });
+}); 
+
+router.post("/login",
+    [
+      check("username")
+        .isLength({ min: 1 }),
+
+      check(
+        "password",
+        "please enter a password"
+      )
+        .isLength({ min: 5 }),
+    ],
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        // console.log(errors.mapped());
+        // console.log(req.body)
+        return res
+          .status(422)
+          .render("register", { errors: errors.mapped(), body: req.body });
+      }
+      return res.render("register-success");
+    }
+  );
+
+router.get("/register", (req, res, next) => {
+  res.render("register", { });
 });
 
-// Please this doc online regarding handlebars validation:
-// https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/forms
-router.post(
-  "/register",
+router.post("/register",
   [
     check("username")
       // Every validator method in the validator lib is available as a
@@ -48,8 +73,8 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // //   console.log('validation errors');
-      console.log(errors.mapped());
-      console.log(req.body)
+      // console.log(errors.mapped());
+      // console.log(req.body)
       // return res.status(422).json({ errors: errors.mapped() });
 
       return res
@@ -58,8 +83,9 @@ router.post(
     }
 
     // matchedData returns only the subset of data validated by the middleware
-    const user = matchedData(req);
-    createUser(user).then(user => res.json(user));
+    // const user = matchedData(req);
+    // createUser(user).then(user => res.json(user));
+    return res.render("register-success");
   }
 );
 

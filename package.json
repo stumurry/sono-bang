@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "run-script-os",
-    "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js && mocha tests\\aws\\*.js && && mocha tests\\db\\*.js",
-    "test:darwin:linux": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha tests/*.js --timeout 15000 && mocha tests/aws/*.js --timeout 15000 && mocha tests/db/*.js"
+    "test:win32": "cd db && ..\\node_modules\\.bin\\sequelize db:migrate && cd .. && echo %cd% && mocha tests\\*.js --timeout 15000",
+    "test:darwin:linux": "cd db;\n ../node_modules/.bin/sequelize db:migrate;\n cd ..;\n mocha tests/*.js --timeout 15000"
   },
   "directories": {
     "test": "tests"

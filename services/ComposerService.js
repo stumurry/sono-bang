@@ -6,7 +6,7 @@ module.exports = {
   // Testing purposes only.
   Disconnect: function() {
     console.log("Closing connection...");
-    db.sequelize.close();
+    return db.sequelize.close();
   },
 
   // Complete Unit Tests Here:

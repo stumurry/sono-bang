@@ -1,12 +1,4 @@
-// require("dotenv").config();
-// var keys = require("../keys.js");
-
-
-process.env.NODE_ENV = "test";
-// For assert operation, please refer to this link:
-// https://www.w3schools.com/nodejs/ref_assert.asp
-var assert = require("assert");
-var meService = require("../services/MeService");
+var { meService, chai, app, expect, path, uuid } = require("../common");
 
 describe("Customer View", function() {
   // Need to connect before executing queries
