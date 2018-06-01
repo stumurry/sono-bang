@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id : DataTypes.INTEGER,
     homepage : DataTypes.STRING,
     description : DataTypes.STRING,
+    ispaid : DataTypes.BOOLEAN,
   }, {});
   composers.associate = function(db) {
     // associations can be defined here

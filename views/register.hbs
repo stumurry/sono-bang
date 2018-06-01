@@ -1,57 +1,76 @@
-<div class="uk-alert uk-alert-danger">
-    <ul>
+<!DOCTYPE html>
+<html>
 
-        {{#errors.name}}
-        <li>{{msg}}</li>{{/errors.name}} 
-        {{#errors.username}}
-        <li>Username must {{msg}} </li>{{/errors.username}}
-        {{#errors.password}}
-        <li>{{msg}}</li>{{/errors.password}}
-    </ul>
-</div>
+    <style>
+        .legend {
+            font-size: 3.5rem;
+            text-align: center;
+            border-bottom: solid;
+            border-color: #714256 !important;
+            padding: 1rem;
+        }
 
-<form class="uk-form uk-form-stacked" action="register" method="post" enctype="multipart/form-data">
+        #register-button {
+            font-size: 1rem;
+        }
 
-    <div class="uk-form-row">
-        <label class="uk-form-label" for="">Name</label>
-        <div class="uk-form-controls">
-            {{#if errors.name}}
-            <input type="text" class="uk-input uk-form-danger" name="name" value="{{body.name}}"> {{else}}
-            <input type="text" class="uk-input" name="name" value="{{body.name}}"> {{/if}}
+        #registration-form {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 1.5rem;
+            margin-bottom: 100%;
+
+
+        }
+
+        .uk-form-label {
+            font-size: 1rem !important;
+        }
+    </style>
+
+    <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+        <div class="uk-navbar-right">
         </div>
+    </nav>
+    <div class='uk-container'>
+
+        <form class="uk-form-stacked" id='registration-form' action="register" method="post" enctype="multipart/form-data">
+            <h3 class='legend'>Sign Up</h3>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Email</label>
+                <div class="uk-form-controls">
+                    <input name="email" class="uk-input" id="form-stacked-text" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Name</label>
+                <div class="uk-form-controls">
+                    <input name="name" class="uk-input" id="form-stacked-text" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Username</label>
+                <div class="uk-form-controls">
+                    <input name="username" class="uk-input" id="form-stacked-text" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Password</label>
+                <div class="uk-form-controls">
+                    <input name="password" class="uk-input" id="form-stacked-text" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Homepage</label>
+                <div class="uk-form-controls">
+                    <input name="homepage" class="uk-input" id="form-stacked-text" type="text" placeholder="">
+                </div>
+            </div>
+
+            <button class="uk-button uk-button-default uk-button-large addButton" id='register-button'>Register</button>
+
+        </form>
+
     </div>
 
-    <!-- optional -->
-    <div class="uk-form-row">
-        <label class="uk-form-label" for="">Desciption</label>
-        <div class="uk-form-controls">
-            <input type="text" class="uk-input" name="description" value="{{body.description}}">
-        </div>
-    </div>
 
-    <!-- optional -->
-    <div class="uk-form-row">
-        <label class="uk-form-label" for="">Home Page</label>
-        <div class="uk-form-controls">
-            <input type="text" class="uk-input" name="homepage" value="{{body.homepage}}">
-        </div>
-    </div>
-
-    <div class="uk-form-row">
-        <label class="uk-form-label" for="">Username</label>
-        <div class="uk-form-controls">
-            {{#if errors.username}}
-            <input type="text" class="uk-input uk-form-danger" name="username" value="{{body.username}}"> {{else}}
-            <input type="text" class="uk-input" name="username" value="{{body.username}}"> {{/if}}
-        </div>
-    </div>
-    <div class="uk-form-row">
-        <label class="uk-form-label" for="">Password</label>
-        <div class="uk-form-controls">
-            {{#if errors.password}}
-            <input type="text" class="uk-input uk-form-danger" name="password"> {{else}}
-            <input type="text" class="uk-input" name="password"> {{/if}}
-        </div>
-    </div>
-    <button>Submit</button>
-</form>

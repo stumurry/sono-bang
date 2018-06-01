@@ -6,7 +6,7 @@ module.exports = {
 };
 
 async function Up(queryInterface, Sequelize) {
-  await queryInterface.addColumn('songs', 'playlist_id', { type: Sequelize.INTEGER, allowNull: false  });
+  await queryInterface.addColumn('songs', 'playlist_id', { type: Sequelize.INTEGER, allowNull: true  });
 
   await queryInterface.addConstraint('songs', ['playlist_id'], {
     type: 'foreign key',

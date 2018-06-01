@@ -87,11 +87,13 @@ describe("/composer", function() {
       expect(user.email).to.equal(testuser.email, "email" + errorMsg);
     }
     async function testDBComposer(composer, c) {
+      // console.log('dbcomposer');
+      // console.log(composer);
       var errorMsg =
         " property not found. Use Sequelize CLI to create a new migration and insert this field.";
-      expect(composer.name).to.equal(composer.name, "name" + errorMsg);
-      expect(composer.description).to.equal(composer.description, "description" + errorMsg);
-      expect(composer.homepage).to.equal(composer.homepage, "homepage" + errorMsg);
+      expect(composer.name).to.equal(c.name, "name" + errorMsg);
+      expect(composer.description).to.equal(c.description, "description" + errorMsg);
+      expect(composer.homepage).to.equal(c.homepage, "homepage" + errorMsg);
       expect(composer.user_id).is.greaterThan(0, "Composer's user_id should be greater than 0");
     }
 
@@ -101,12 +103,26 @@ describe("/composer", function() {
         description: "A playlist I designed for a potential producer."
       };
       composerService.CreatePlayList(composer, testplaylist)
-        .then(p => (playlist = p))
-        .then(console.log("creating playlist"))
+        .then(p => {
+          testDBPlaylist(p, testplaylist)
+          return p; // make available for other promise chain
+        })
         .then(async p => console.log(await amazonService.ListFiles("" + p.id)))
         .then(_ => done())
         .catch(_ => done(_));
     });
+    async function testDBPlaylist(playlist, p) {
+      console.log('NMAME    - p');
+      console.log(p);
+  console.log('-----------------------')
+      console.log(playlist);
+      console.log('-----------------------')
+      var errorMsg =
+        " property not found. Use Sequelize CLI to create a new migration and insert this field.";
+      expect(playlist.name).to.equal(p.name, "name" + errorMsg);
+      expect(playlist.description).to.equal(p.description, "description" + errorMsg);
+      expect(playlist.genre).to.equal(p.genre, "genre" + errorMsg);
+    }
 
     it("should be able to add song to playlist", function(done) {
       var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";

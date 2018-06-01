@@ -1,0 +1,77 @@
+<style>
+    .uk-card-title {
+        text-align: center;
+        font-size: 4rem;
+        border-bottom: solid;
+        border-color: #714256 !important;
+        padding: 2rem;
+    }
+
+    #verification-check {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 25%;
+        width: 25%;
+    }
+
+    #register-button {
+        font-size: 1rem;
+    }
+
+    #thank-you {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 1.5rem;
+        margin-bottom: 100%;
+
+
+    }
+
+    .uk-form-label {
+        font-size: 1rem !important;
+    }
+
+    .verification-message {
+        text-align: center;
+    }
+
+    #confirmation-number {
+        font-size: 1.25rem;
+        color: grey;
+    }
+
+    #payment-verified {
+        font-size: 2.25rem;
+    }
+
+    #back-to-profile {
+        font-size: 1rem;
+
+    }
+
+    .uk-card {
+        padding: 1rem;
+
+    }
+</style>
+
+<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+    <div class="uk-navbar-right">
+    </div>
+</nav>
+<div class='uk-container' id='thank-you'>
+
+    <div class="uk-card uk-card-default uk-card-body">
+        <h3 class="uk-card-title">Thank You!</h3>
+        <img id='verification-check' src='/images/verification.png'>
+        <h3 class='verification-message' id='payment-verified'>Payment has been verified</h3>
+        <div class="uk-card-footer uk-align-center">
+            <h2 class='verification-message' id='confirmation-number'>your confirmation number is #32257
+
+            </h2>
+            <a class="uk-button uk-button-default uk-button-large addButton" id='back-to-profile' href="/composer/{{key}}">Click here to continue</button>
+        </div>
+
+    </div>
+
+</div>

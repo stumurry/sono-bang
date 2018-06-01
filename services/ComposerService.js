@@ -2,6 +2,8 @@ const db = require("../db/models");
 
 var AmazonService = require("./AmazonService");
 
+var composerUtil = require("../utils/ComposerUtil")
+
 module.exports = {
   // Testing purposes only.
   Disconnect: function() {
@@ -24,6 +26,7 @@ module.exports = {
       name: composer.name,
       description: composer.description,
       user_id: user.id,
+      homepage : composer.homepage,
     };
 
     var composer =  await db.composers.create(c);
@@ -46,8 +49,9 @@ module.exports = {
     }
   },
 
-
-
+  ListPlayLists: async function(composer) {
+    return await db.playlists.findAll({ where: { composer_id: composer.id } });
+  },
 
   CreatePlayList: async function(composer, playlist) {
     playlist.composer_id = composer.id;
@@ -72,6 +76,28 @@ module.exports = {
 
     return songResponse;
   },
+  AddSongToComposer: async function(salt, composer, song, stream) {
+    // Document S3 location along with meta data provided by Composer.
+    song.composer_id = composer.id;
+    song.key =
+       composer.id + "-" + salt + "-" + song.fileName;
+
+    console.log("uploading file");
+    // Take song uploaded by web form and send it AWS S3
+    var resp = await AmazonService.UploadFileByStream(song, stream);
+
+    console.log("creating file");
+    var songResponse = await db.songs.create(song);
+
+    console.log("finished");
+
+    return songResponse;
+  },
+
+  ListSongsByComposer: async (composer) => {
+    return await db.songs.findAll({ where: { composer_id: composer.id } });
+  },
+
   ListSongsInPlayList: async function(playlist) {
     return await db.songs.findAll({ where: { playlist_id: playlist.id } });
   },
@@ -83,7 +109,24 @@ module.exports = {
   RemovePlaylist: async function(playlist) {
     return await playlist.destroy();
   },
-  RemoveSong: async function(song) {
+  RemoveSong: async (song) => {
     return await song.destroy();
+  },
+  UpdatePayment : async (composer) => {
+    console.log('UpdatePayment');
+    var composer = await db.composers.findById( composer.id );
+    console.log(composer);
+    composer.ispaid = true;
+
+    console.log('updating composer');
+    composer =  await composer.update( { ispaid : true } );
+    console.log(composer);
+
+    console.log('findone');
+    var user = db.users.findById( composer.user_id );
+    console.log(user);
+
+    return composerUtil.encrypt( { user : user['dataValues'], composer: composer['dataValues'] });
+
   }
 };

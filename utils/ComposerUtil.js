@@ -14,9 +14,13 @@ var ComposerUtil = {
   },
 
   decrypt: function(text) {
+    // console.log('text');
+    // console.log(text);
     var decipher = crypto.createDecipher(algorithm, password);
     var dec = decipher.update(text, "hex", "utf8");
     dec += decipher.final("utf8");
+    // console.log('Deciphered Text');
+    // console.log(dec);
     return JSON.parse(dec);
   }
 };
