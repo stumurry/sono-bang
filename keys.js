@@ -25,3 +25,7 @@ exports.encryption = {
   algorithm : process.env.CRYPTO_ALGORITHM,
   password : process.env.CRYPTO_PASSWORD,
 }
+
+exports.aws = {
+  BUCKET : "sonobang-test"
+}

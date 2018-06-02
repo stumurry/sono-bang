@@ -76,11 +76,7 @@ module.exports = {
 
     return songResponse;
   },
-  AddSongToComposer: async function(salt, composer, song, stream) {
-    // Document S3 location along with meta data provided by Composer.
-    song.composer_id = composer.id;
-    song.key =
-       composer.id + "-" + salt + "-" + song.fileName;
+  AddSongToComposer: async function(song, stream) {
 
     console.log("uploading file");
     // Take song uploaded by web form and send it AWS S3
@@ -110,6 +106,8 @@ module.exports = {
     return await playlist.destroy();
   },
   RemoveSong: async (song) => {
+    var song = await db.songs.findById( song.id );
+    var resp = await AmazonService.DeleteFile(song.bucket, song.key);
     return await song.destroy();
   },
   UpdatePayment : async (composer) => {

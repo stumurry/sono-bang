@@ -12,7 +12,8 @@ module.exports = {
   // old school callback pattern instead of returning a Promise
 
   // song - song: song db table, data_stream: file stream from disk
-  UploadFile: async function(song, file_uri) {
+  UploadFile: function(song, file_uri) {
+    // Need to use a promise because AWS uses old school design pattern without Async support
     return new Promise((resolve, reject) => {
       if (!file_uri) throw "Filename missing.  Must include file data.";
 
@@ -38,15 +39,15 @@ module.exports = {
   // song - song: song db table, data_stream: file stream from disk
   UploadFileByStream: async function(song, stream) {
     return new Promise((resolve, reject) => {
-      var params = { Bucket: bucket, Key: song.key, Body: stream };
-
+      var params = { Bucket: song.bucket, Key: song.key, Body: stream };
+      console.log('AWS Params');
+      console.log(params);
       console.log('Uploading to AWS');
       s3.upload(params, function(err, data) {
         if (err) {
           console.log(err);
           reject(err);
         } else {
-          
           let objectData = data.Body; // Use the encoding necessary
           console.log(objectData);
           resolve({ Key: params.Key, Bucket: bucket });
@@ -88,7 +89,7 @@ module.exports = {
   },
 
   // var file = { Bucket: "sonobang-test", Key: f.Key };
-  DeleteFile: async function(key) {
+  DeleteFile: async function(bucket, key) {
     // Require promise here instead of async because AWS-SDK uses
     // old school callback pattern instead of returning a Promise
     return new Promise((resolve, reject) => {

@@ -365,11 +365,11 @@
                 <tbody>
                     {{#each songs}}
                     <tr>
-                        <td>{{ name }}</td>
+                        <td>{{ name }} </td>
                         <td>{{ genre }}</td>
                         <td uk-margin>
                             <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
-                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                            <button class="uk-button uk-button-default uk-button-small delete" type="button" onclick="deleteSong({{id}})">X</button>
                         </td>
                     </tr>
                     {{/each}}
@@ -470,7 +470,35 @@
                     <button class="uk-button uk-button-primary" type="button">Send playlist</button>
      
                 </form> -->
-
-
     </div>
 </div>
+
+<script>
+    var KEY = '{{key}}';
+    function deleteSong(id) {
+        $.ajax({
+            url: '/composer/song/' + id + '?' + $.param({ "key": KEY }),
+            type: 'DELETE',
+            success: successDelete,
+            error: deleteError,
+            statusCode: {
+                401: function () {
+                    window.location='/me/login';
+                },
+                400 : function(o) {
+                    alert(o.error);
+                },
+                200 : function(o) {
+                    window.location='/composer/' + KEY;
+                }
+            }
+        });
+    }
+
+    function successDelete() {
+        window.location = '/composer/' + KEY;
+    }
+    function deleteError() {
+        alert('Error deleting resource');
+    }
+</script>
