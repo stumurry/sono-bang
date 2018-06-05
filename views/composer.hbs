@@ -3,7 +3,7 @@
 
     body {
         padding-top: 54px;
-        background-image: url("../images/bg_diamond.png");
+        background-image: url("bg_diamond.png");
         height: 100%;
     }
 
@@ -14,6 +14,8 @@
 
     nav a {
         border-radius: 5px;
+        margin: 15px 50px 0 0;
+        color: #714256 !important;
     }
 
     nav a:hover {
@@ -25,6 +27,19 @@
 
     .uk-active a {
         font-weight: bold;
+    }
+
+    .uk-navbar-dropdown {
+        /* padding-right: 5px !important; */
+        border-radius: 5px;
+        padding: 0 0 15px 0;
+        width: 123px;
+    }
+
+    .uk-navbar-dropdown a {
+        width: 100%;
+        text-align: center;
+
     }
 
 
@@ -111,6 +126,7 @@
 
     .uk-modal-body button {
         background: #79b6b8;
+        color: #fff;
         border-radius: 3px;
         font-size: 14pt;
     }
@@ -124,8 +140,25 @@
         background: #ef8321;
     }
 
-    .nub:hover {
-        font-weight: bolder;
+    /* .uk-form-custom */
+
+    .addSong {
+        border: #714256 1px solid !important;
+        border-radius: 3px;
+        background: #714256 !important;
+        color: #fff;
+    }
+
+    .uk-form-custom:hover {
+        /* .addSong:hover { */
+        font-weight: 500 !important;
+        border-radius: 3px !important;
+        background-color: #ef8321 !important;
+    }
+
+    .main-dragDrop {
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .card-BG {
@@ -153,6 +186,7 @@
         float: left;
         width: 33.3%;
         padding: 18px;
+        margin-bottom: 200px;
     }
 
     .columns li {
@@ -224,12 +258,27 @@
 
     /***** PROFILE *****/
 
-    .uk-card {
-        margin-top: 100px;
+    .profile {
+        margin: 0 auto;
+        margin-top: 25px;
+        margin-bottom: 150px;
+        width: 600px;
+    }
+
+    .profilePic,
+    .memberName {
+        float: left;
+    }
+
+    .memberName {
+        width: 350px;
+        margin-top: 25px;
+    }
+
+    strong {
+        color: #714256;
     }
 </style>
-
-
 <div>
     <div class="uk-position-top">
         <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
@@ -258,123 +307,56 @@
 <hr class="uk-divider-small">
 <div class="uk-child-width-1-2@m uk-grid-match" uk-grid>
     <div>
+
         <div class="uk-card uk-card-default uk-card-body card-BG" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <h3 class="uk-card-title">Your Songs</h3>
-            <h3 class="uk-card-title"></h3>
-
-            <button class='uk-button uk-button-default addButton' type='button' uk-toggle='target:#add-songs'>Add Songs</button>
-
-            <div id='add-songs' uk-modal>
-                <div class='uk-modal-dialog uk-modal-body'>
-
-                    <form action="/composer/song" method="post" enctype="multipart/form-data" class="uk-form-stacked">
-                        <input type="hidden" name="key" value="{{key}}" />
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="form-stacked-text">Song Name</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input" id="form-stacked-text" type="text" name="name">
-                            </div>
-                        </div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="form-stacked-text">Genre</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input" id="form-stacked-text" type="text" name="genre">
-                            </div>
-                        </div>
-
-                        <div class="js-upload uk-placeholder uk-text-center modal-dragDrop">
-                            <span uk-icon="icon: cloud-upload"></span>
-                            <span class="uk-text-middle">To add song -- drag & drop here or</span>
-                            <div uk-form-custom>
-                                <input type="file" name="mp3file" multiple>
-                                <!-- <span class="uk-link">select from file</span> -->
-                                <button class="uk-button uk-button-primary dragDrop-button nub" type="button">Select song from file</button>
-                            </div>
-
-                        </div>
-                        <button class="uk-button uk-button-primary" type="submit">Add Song</button>
+            <div class="js-upload uk-placeholder main-dragDrop">
 
 
-                        <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+                <p>
+                    <span class="uk-text-middle uk-text-small">To add song -- drag & drop here or</span>
+                </P>
 
-                        <script>        
-                            var bar = document.getElementById('js-progressbar');
-                            UIkit.upload('.js-upload', {
-
-                                url: '',
-                                multiple: true,
-
-                                beforeSend: function () {
-                                    console.log('beforeSend', arguments);
-                                },
-                                beforeAll: function () {
-                                    console.log('beforeAll', arguments);
-                                },
-                                load: function () {
-                                    console.log('load', arguments);
-                                },
-                                error: function () {
-                                    console.log('error', arguments);
-                                },
-                                complete: function () {
-                                    console.log('complete', arguments);
-                                },
-                                loadStart: function (e) {
-                                    console.log('loadStart', arguments);
-                                    bar.removeAttribute('hidden');
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
-                                progress: function (e) {
-                                    console.log('progress', arguments);
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
-                                loadEnd: function (e) {
-                                    console.log('loadEnd', arguments);
-                                    bar.max = e.total;
-                                    bar.value = e.loaded;
-                                },
-                                completeAll: function () {
-                                    console.log('completeAll', arguments);
-                                    setTimeout(function () {
-                                        bar.setAttribute('hidden', 'hidden');
-                                    }, 1000);
-
-                                    alert('Upload Completed');
-                                }
-                            });        
-                        </script>
-
-                    </form>
-
-
+                <div uk-form-custom>
+                    <input type="file" multiple>
+                    <button class="uk-button uk-button-default addSong" type="button">Select song from file</button>
                 </div>
+
+                <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+
+                <table class="uk-table uk-table-justify uk-table-divider">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-small">Song</th>
+                            <th>Genre</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each songs}}
+                        <tr>
+                            <td>
+                                <a href="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}">{{ name }}</a>
+                            </td>
+                            <td>{{ genre }}</td>
+                            <td uk-margin>
+                                <audio controls>
+                                    <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
+                                </audio>
+                            </td>
+                            <td >
+                                <button song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-playlist" type="button">Add to Playlist</button>
+                                <button song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" type="button">X</button>
+
+                                
+                            </td>
+                            
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
             </div>
-
-
-
-            <table class="uk-table uk-table-justify uk-table-divider">
-                <thead>
-                    <tr>
-                        <th class="uk-width-small">Song</th>
-                        <th>Genre</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each songs}}
-                    <tr>
-                        <td>{{ name }} </td>
-                        <td>{{ genre }}</td>
-                        <td uk-margin>
-                            <button class="uk-button uk-button-default uk-button-small" type="button">Add to Playlist</button>
-                            <button class="uk-button uk-button-default uk-button-small delete" type="button" onclick="deleteSong({{id}})">X</button>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
         </div>
     </div>
 
@@ -383,9 +365,9 @@
             <h3 class="uk-card-title">Created Playlists</h3>
             <h3 class="uk-card-title"></h3>
             <button class='uk-button uk-button-default addButton' type='button' uk-toggle='target:#new-playlist'>New Playlist</button>
-
             <div id='new-playlist' uk-modal>
                 <div class='uk-modal-dialog uk-modal-body'>
+
                     <form action="/composer/playlist" method="post" class="uk-form-stacked">
                         <input type="hidden" value="{{key}}" name="key" />
                         <div class="uk-margin">
@@ -402,6 +384,7 @@
                         </div>
                         <button class="uk-button uk-button-primary" type="submit">Create Playlist</button>
                     </form>
+
                 </div>
             </div>
             <table class="uk-table uk-table-justify uk-table-divider">
@@ -417,7 +400,7 @@
                     {{#each playlists}}
                     <tr uk-accordion>
                         <td class="uk-closed">
-                            <a class="uk-accordion-title" href="#">{{name}} | {{genre}}</a>
+                            <a class="uk-accordion-title" href="#">{{name}}</a>
                             <div class="uk-accordion-content">
                                 <p>
                                     <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
@@ -425,7 +408,7 @@
                                     <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
                             </div>
                         </td>
-                        <td>Genre Type</td>
+                        <td>{{genre}}</td>
                         <td uk-margin>
                             <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
                             <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
@@ -433,7 +416,6 @@
                         </td>
                     </tr>
                     {{/each}}
-
                 </tbody>
             </table>
         </div>
@@ -473,32 +455,110 @@
     </div>
 </div>
 
-<script>
-    var KEY = '{{key}}';
-    function deleteSong(id) {
-        $.ajax({
-            url: '/composer/song/' + id + '?' + $.param({ "key": KEY }),
-            type: 'DELETE',
-            success: successDelete,
-            error: deleteError,
-            statusCode: {
-                401: function () {
-                    window.location='/me/login';
-                },
-                400 : function(o) {
-                    alert(o.error);
-                },
-                200 : function(o) {
-                    window.location='/composer/' + KEY;
-                }
-            }
-        });
-    }
 
-    function successDelete() {
-        window.location = '/composer/' + KEY;
-    }
-    function deleteError() {
-        alert('Error deleting resource');
-    }
+<script>
+
+    // Using Jquery until we go into Angular or React.
+    $(document).ready(() => {
+        var key = '{{key}}';
+        $('.delete-song').on('click', (evt) => {
+
+            console.log(evt.target)
+            var id = $(evt.target).attr('song-id');
+            console.log(id)
+            console.log('Deleting ID=' + id);
+            $.ajax({
+                url: '/composer/song/' + id + '?' + $.param({ "key": key }),
+                type: 'DELETE',
+                success: successDelete,
+                error: deleteError,
+                statusCode: {
+                    401: function () {
+                        window.location = '/me/login';
+                    },
+                    400: function (o) {
+                        alert(o.error);
+                    },
+                    200: function (o) {
+                        window.location = '/composer/' + key;
+                    }
+                }
+            });
+        });
+
+        $('.play-song').on('click', (evt) => {
+            var key = $(evt.target).attr('song-key');
+            alert(key);
+
+        });
+
+
+        function successDelete() {
+            window.location = '/composer/' + key;
+        }
+        function deleteError() {
+            alert('Error deleting resource');
+        }
+
+        var bar = document.getElementById('js-progressbar');
+
+        UIkit.upload('.js-upload', {
+            // name  : 'asdf'
+            url: 'song',
+            multiple: true,
+            params: { key: key },
+
+            beforeSend: function () {
+                console.log('beforeSend', arguments);
+            },
+            beforeAll: function () {
+                console.log('beforeAll', arguments);
+            },
+            load: function () {
+                console.log('load', arguments);
+            },
+            error: function () {
+                alert('Error');
+                console.log('error', arguments);
+            },
+            complete: function () {
+                console.log('complete', arguments);
+            },
+
+            loadStart: function (e) {
+                console.log('loadStart', arguments);
+
+                bar.removeAttribute('hidden');
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+
+            progress: function (e) {
+                console.log('progress', arguments);
+
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+
+            loadEnd: function (e) {
+                console.log('loadEnd', arguments);
+
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+
+            completeAll: function () {
+                console.log('completeAll', arguments);
+
+                setTimeout(function () {
+                    bar.setAttribute('hidden', 'hidden');
+                }, 1000);
+
+                window.location = '/composer/' + key;
+            }
+
+        });
+    });
+
+
 </script>

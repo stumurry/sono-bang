@@ -2,7 +2,14 @@ const db = require("../db/models");
 
 var AmazonService = require("./AmazonService");
 
-var composerUtil = require("../utils/ComposerUtil")
+var composerUtil = require("../utils/ComposerUtil");
+
+var mm = require("musicmetadata");
+var NodeID3 = require("node-id3")
+
+// needed for pipe() or Readable Streams.
+// MusicMetaData doesn't know how to handle streams made by express-fileuploader
+var ns = require("streamifier");
 
 module.exports = {
   // Testing purposes only.
@@ -14,7 +21,6 @@ module.exports = {
   // Complete Unit Tests Here:
 
   CreateComposer: async composer => {
-
     var user = await db.users.create({
       name: composer.name,
       username: composer.username,
@@ -26,27 +32,27 @@ module.exports = {
       name: composer.name,
       description: composer.description,
       user_id: user.id,
-      homepage : composer.homepage,
+      homepage: composer.homepage
     };
 
-    var composer =  await db.composers.create(c);
+    var composer = await db.composers.create(c);
     return {
-      composer : composer,
-      user : user,
-    }
-
+      composer: composer,
+      user: user
+    };
   },
 
   GetComposer: async (username, password) => {
+    var user = await db.users.findOne({
+      where: { username: username, password: password }
+    });
 
-    var user = await db.users.findOne({ where: { username: username, password : password} });
-
-    var composer = await db.composers.findOne( { where  : { user_id : user.id }});
+    var composer = await db.composers.findOne({ where: { user_id: user.id } });
 
     return {
-      composer : composer,
-      user : user,
-    }
+      composer: composer,
+      user: user
+    };
   },
 
   ListPlayLists: async function(composer) {
@@ -76,11 +82,14 @@ module.exports = {
 
     return songResponse;
   },
-  AddSongToComposer: async function(song, stream) {
+  AddSongToComposer: async function(song, file) {
+    // As we are uploading data to S3, read the file info and duration.
+
+    console.log("Adding song to composer");
 
     console.log("uploading file");
     // Take song uploaded by web form and send it AWS S3
-    var resp = await AmazonService.UploadFileByStream(song, stream);
+    var resp = await AmazonService.UploadFile(song, file);
 
     console.log("creating file");
     var songResponse = await db.songs.create(song);
@@ -90,7 +99,7 @@ module.exports = {
     return songResponse;
   },
 
-  ListSongsByComposer: async (composer) => {
+  ListSongsByComposer: async composer => {
     return await db.songs.findAll({ where: { composer_id: composer.id } });
   },
 
@@ -98,33 +107,35 @@ module.exports = {
     return await db.songs.findAll({ where: { playlist_id: playlist.id } });
   },
   RemoveComposer: async function(composer) {
-    var user = db.users.findById( composer.user_id );
+    var user = db.users.findById(composer.user_id);
     await composer.destroy(); // remove composer first before removing user otherwise a foreign key constraint error will occur.
     await user.destroy();
   },
   RemovePlaylist: async function(playlist) {
     return await playlist.destroy();
   },
-  RemoveSong: async (song) => {
-    var song = await db.songs.findById( song.id );
+  RemoveSong: async song => {
+    var song = await db.songs.findById(song.id);
     var resp = await AmazonService.DeleteFile(song.bucket, song.key);
     return await song.destroy();
   },
-  UpdatePayment : async (composer) => {
-    console.log('UpdatePayment');
-    var composer = await db.composers.findById( composer.id );
+  UpdatePayment: async composer => {
+    console.log("UpdatePayment");
+    var composer = await db.composers.findById(composer.id);
     console.log(composer);
     composer.ispaid = true;
 
-    console.log('updating composer');
-    composer =  await composer.update( { ispaid : true } );
+    console.log("updating composer");
+    composer = await composer.update({ ispaid: true });
     console.log(composer);
 
-    console.log('findone');
-    var user = db.users.findById( composer.user_id );
+    console.log("findone");
+    var user = db.users.findById(composer.user_id);
     console.log(user);
 
-    return composerUtil.encrypt( { user : user['dataValues'], composer: composer['dataValues'] });
-
+    return composerUtil.encrypt({
+      user: user["dataValues"],
+      composer: composer["dataValues"]
+    });
   }
 };
