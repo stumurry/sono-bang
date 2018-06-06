@@ -1,4 +1,14 @@
-var { composerService, chai, app, expect, path, amazonService, uuid } = require("../common");
+var {
+  composerService,
+  chai,
+  app,
+  expect,
+  path,
+  amazonService,
+  uuid,
+  composerUtil,
+  keys
+} = require("../common");
 
 describe("/composer", function() {
   // Need to connect before executing queries
@@ -66,12 +76,13 @@ describe("/composer", function() {
           "A music song writer specializing in motion picture themes.",
         username: "stu",
         password: "stu", // test using HMAC encryption later.
-        email : "stu@sss.com",
-        homepage : 'http://helloworld.com'
+        email: "stu@sss.com",
+        homepage: "http://helloworld.com"
       };
 
-      composerService.CreateComposer(c)
-        .then(cc => (composer = cc.composer, user = cc.user))
+      composerService
+        .CreateComposer(c)
+        .then(cc => ((composer = cc.composer), (user = cc.user)))
         .then(_ => testDBUser(user, c))
         .then(_ => testDBComposer(composer, c))
         .then(_ => done())
@@ -92,9 +103,15 @@ describe("/composer", function() {
       var errorMsg =
         " property not found. Use Sequelize CLI to create a new migration and insert this field.";
       expect(composer.name).to.equal(c.name, "name" + errorMsg);
-      expect(composer.description).to.equal(c.description, "description" + errorMsg);
+      expect(composer.description).to.equal(
+        c.description,
+        "description" + errorMsg
+      );
       expect(composer.homepage).to.equal(c.homepage, "homepage" + errorMsg);
-      expect(composer.user_id).is.greaterThan(0, "Composer's user_id should be greater than 0");
+      expect(composer.user_id).is.greaterThan(
+        0,
+        "Composer's user_id should be greater than 0"
+      );
     }
 
     it("should be able to create a playlist", function(done) {
@@ -102,9 +119,11 @@ describe("/composer", function() {
         name: "Stu's custom playlist# 1",
         description: "A playlist I designed for a potential producer."
       };
-      composerService.CreatePlayList(composer, testplaylist)
+      composerService
+        .CreatePlayList(composer, testplaylist)
         .then(p => {
-          testDBPlaylist(p, testplaylist)
+          testDBPlaylist(p, testplaylist);
+          playlist = p;
           return p; // make available for other promise chain
         })
         .then(async p => console.log(await amazonService.ListFiles("" + p.id)))
@@ -112,52 +131,40 @@ describe("/composer", function() {
         .catch(_ => done(_));
     });
     async function testDBPlaylist(playlist, p) {
-      console.log('NMAME    - p');
-      console.log(p);
-  console.log('-----------------------')
-      console.log(playlist);
-      console.log('-----------------------')
       var errorMsg =
         " property not found. Use Sequelize CLI to create a new migration and insert this field.";
       expect(playlist.name).to.equal(p.name, "name" + errorMsg);
-      expect(playlist.description).to.equal(p.description, "description" + errorMsg);
+      expect(playlist.description).to.equal(
+        p.description,
+        "description" + errorMsg
+      );
       expect(playlist.genre).to.equal(p.genre, "genre" + errorMsg);
     }
 
-    it("should be able to add song to playlist", function(done) {
+    // When a user drags and drops a song onto the screen.  This file should be added to songlist.
+    it("should be able to add song to composer", function(done) {
       var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";
+      // var fName = "./tests/data/airborne.mp3";
 
-      var fileName = path.basename(fName);
-
-      // Salt Key with a GUID to prevent key name collisions for like files.
-      var salt = uuid.v4();
-
-      // Form Data supplied by Composer
-      var testsong = {
-        name: 'HAYDN "CONCERTO D-MAJOR"',
-        fileName: fileName,
-        bucket: "sonobang-test", // bucket name
-        description: "REINER HOCHMUTH CELLIST"
-      };
-
-      // S3 buckets offers only a `prefix` attribute for seaching.
-      // S3 limits the number of buckets you can create and uses a Global Namespace.
-      // We need a way to tie this file to a database entry.
-      composerService.AddSongToPlayList(
-        salt,
-        composer,
-        playlist,
-        testsong,
-        fName
-      )
-        .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
-        .then(_ => testDBProperties(song, testsong))
-        .then(_ => testKeyNomenclature(testsong, salt))
-        .then(_ => console.log(song))
-        .then(_ => amazonService.DeleteFile(song.key)) // Done uploading, now delete it.
-        .then(_ => done())
-        .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
+      composerUtil.GetSongInformation(fName, composer)
+        .then(testsong => {
+          // S3 buckets offers only a `prefix` attribute for seaching.
+          // S3 limits the number of buckets you can create and uses a Global Namespace.
+          // We need a way to tie this file to a database entry.
+          composerService
+            .AddSongToComposer(testsong, fName)
+            .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
+            .then(_ => testDBProperties(song, testsong))
+            // .then(_ => testKeyNomenclature(testsong, salt))
+            .then(_ => console.log(song))
+            .then(_ => amazonService.DeleteFile('sonobang-test', song.key)) // Done uploading, now delete it.
+            .then(_ => done())
+            .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
+        })
+        .catch(_ => done(_));
     });
+
+    
 
     function testDBProperties(song, testsong) {
       // console.log(song)
@@ -179,42 +186,55 @@ describe("/composer", function() {
       // Be sure to add new fields to db/models/songs.js
     }
 
-    async function testKeyNomenclature(testsong, salt) {
-      var prefix = "" + playlist.id;
+    // async function testKeyNomenclature(testsong, salt) {
+    //   var prefix = "" + playlist.id;
 
-      // ** Example Filename(Key) **
-      // <PLAYLIST_ID>-<COMPOSER_ID>-<SALT>-<FILENAME>.<EXT>
-      var key =
-        prefix + "-" + composer.id + "-" + salt + "-" + testsong.fileName;
-      console.log("testKeyNomenclature");
-      console.log(key);
-      var files = await amazonService.ListFiles(prefix);
+    //   // ** Example Filename(Key) **
+    //   // <PLAYLIST_ID>-<COMPOSER_ID>-<SALT>-<FILENAME>.<EXT>
+    //   var key =
+    //     prefix + "-" + composer.id + "-" + salt + "-" + testsong.fileName;
+    //   console.log("testKeyNomenclature");
+    //   console.log(key);
+    //   var files = await amazonService.ListFiles(prefix);
 
-      console.log(files["Contents"]);
+    //   console.log(files["Contents"]);
 
-      expect(files["Contents"][0]).to.include(
-        { Key: key },
-        "Filename(Key) not found in S3 Bucket"
-      );
-    }
+    //   expect(files["Contents"][0]).to.include(
+    //     { Key: key },
+    //     "Filename(Key) not found in S3 Bucket"
+    //   );
+    // }
 
-    it("should be able to list songs in a playlist", function(done) {
+    it("should be able to list songs by composer", function(done) {
+
       var hasException = false;
-      composerService.ListSongsInPlayList(playlist)
+      composerService
+        .ListSongsByComposer(composer)
         .then(songs => {
+          
           // Songs should have references to boh playlist and composer
-          var list = songs.filter(x => x.playlist_id == playlist.id);
+          var list = songs.filter(x => x.composer_id == composer.id);
           expect(list.length).is.greaterThan(
             0,
-            "Intended playlist should have one record in it. Songs should have references to both playlist and composer."
+            "Intended song list should have one record in it. Songs should have reference a composer."
           );
         })
         .then(_ => done())
         .catch(_ => done(_));
     });
 
-    it("should be able to remove song from playlist", function(done) {
-      composerService.RemoveSong(song)
+    it("should be able to remove song", function(done) {
+      composerService
+        .RemoveSong(song)
+        .then(_ => song = null)
+        .then(_ => done())
+        .catch(_ => done(_));
+    });
+
+    it("should be able to remove composer", function(done) {
+      composerService
+        .RemoveComposer(composer)
+        .then(_ => (composer = null, user = null))
         .then(_ => done())
         .catch(_ => done(_));
     });

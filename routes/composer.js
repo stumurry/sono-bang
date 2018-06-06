@@ -11,7 +11,7 @@ const fs = require("fs");
 const keys = require("../keys");
 
 var formidable = require("formidable");
-var mm = require("musicmetadata");
+
 
 router.get("/song-upload/", async (req, res, next) => {
   return res.render("song-upload", { key: req.query.key });
@@ -21,6 +21,7 @@ router.get("/song-upload/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     var id = req.params.id;
+    console.log("received an id of " + i + " for /composer/:id");
     k = composerUtil.decrypt(id);
 
     if (!k.composer.ispaid) {
@@ -38,7 +39,7 @@ router.get("/:id", async (req, res, next) => {
       songs: songs
     });
   } catch (ex) {
-    console.log(ex);
+    console.log("Oops, authentication failed.");
     console.log("redirecting to login");
     return res.redirect("/me/login");
   }
@@ -49,12 +50,51 @@ router.get("/", function(req, res, next) {
   return res.redirect("/me/login");
 });
 
+// Add song to playlist
+router.post("/playlist-songs", async (req, res, next) => {
+  // We need two try/catch blocks because authentication takes first priority.  Next comes business logic.
+  try {
+    console.log("req.body");
+    var id = req.body.key;
+
+    console.log(req.body);
+    k = composerUtil.decrypt(id);
+
+    try {
+      // Dealing with checkboxes here.  playlist-2 means playlist with id of 2
+      var playListIds = Object.keys(req.body)
+        .filter(_ => _.startsWith("playlist-"))
+        .map(_ => _.replace("playlist-", ""))
+        .map(_ => parseInt(_));
+
+      console.log("playListIds");
+      console.log(playListIds);
+    } catch (ex) {
+      console.log("ouch");
+      console.log(ex);
+      res
+        .status(400)
+        .send(
+          JSON.stringify({ message: "Failed to add song to playlist" }, null, 3)
+        );
+    }
+  } catch (ex) {
+    console.log("oops");
+    res.status(401).send(JSON.stringify({ message: "Unauthorized" }, null, 3));
+  }
+
+  var key = req.body.key;
+
+  return res.render("composer", { key: key });
+});
+
 // Add playlist
 router.post("/playlist", (req, res, next) => {
   console.log("Posting to playlist");
   console.log(req.body);
   var _ = composerUtil.decrypt(req.body.key);
   var playlist = { name: req.body.name, genre: req.body.genre };
+
   return composerService
     .CreatePlayList(_.composer, playlist)
     .then(() => res.redirect("/composer/" + req.body.key))
@@ -71,72 +111,25 @@ router.post("/song", async (req, res, next) => {
   form.parse(req, (err, fields, files) => {
     var ffff = files["files[]"];
     ProcessFileUploadForm(req, fields, files, ffff)
-    .then(s => {
-      return res.status(200).send({ success : true });
-    })
-    .catch(ex => {
-      console.log('Ooops, something happened.');
-      console.log(ex);
-      return res.status(200).send({ error : true, exception : ex });
-    });
+      .then(s => {
+        return res.status(200).send({ success: true });
+      })
+      .catch(ex => {
+        console.log("Ooops, something happened.");
+        console.log(ex);
+        return res.status(200).send({ error: true, exception: ex });
+      });
   });
-
 });
 
 async function ProcessFileUploadForm(req, fields, files, ffff) {
 
-  console.log('ffff');
-  console.log(files);
-
   var _ = composerUtil.decrypt(fields.key);
 
-  var meta = await GetFileMetaData(ffff.path);
+  var song = composerUtil.GetSongInformation(ffff.path, _.composer);
 
-  var keyTitle = str = meta.title.replace(/\s/g, '');
+  await composerService.AddSongToComposer(song, ffff.path);
 
-  console.log(meta);
-  var song = {
-    name: meta.title,
-    description: fields.artist ? fields.artist[0] : '',
-    genre: fields.genre ? fields.genre[0] : '',
-    fileName: ffff.name,
-    bucket: keys.aws.BUCKET,
-    composer_id: _.composer.id,
-    // Salt Key with a GUID to prevent key name collisions for like files.
-    key: _.composer.id + "-" + uuid.v4() + "-" + keyTitle + '.mp3'
-  };
-
-  console.log('song');
-  console.log(song);
-
-
-  await composerService.AddSongToComposer(
-    song,
-    ffff.path,
-  );
-
-  // res.redirect("/composer/" + req.body.key);
-  
-}
-
-function GetFileMetaData(path) {
-  return new Promise((resolve, reject) => {
-    // var stats = fs.statSync(fObject.path);
-    
-    var rs = fs.createReadStream(path);
-
-    var parser = mm(rs, function(err, metadata) {
-      if (err) {
-        rs.close();
-        reject(err);
-        console.log(err);
-      } else {
-        rs.close();
-        resolve(metadata);
-        console.log(metadata);
-      }
-    });
-  });
 }
 
 router.delete("/song/:id", async (req, res, next) => {

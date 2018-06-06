@@ -65,29 +65,28 @@ module.exports = {
   },
   // ** Example Filename(Key) **
   // <PLAYLIST_ID>-<COMPOSER_ID>-<SALT>-<FILENAME>.<EXT>
-  AddSongToPlayList: async function(salt, composer, playlist, song, file_uri) {
-    // Document S3 location along with meta data provided by Composer.
-    song.playlist_id = playlist.id;
-    song.key =
-      playlist.id + "-" + composer.id + "-" + salt + "-" + song.fileName;
+  // AddSongToPlayList: async function(salt, composer, playlist, song, file_uri) {
+  //   // Document S3 location along with meta data provided by Composer.
+  //   song.playlist_id = playlist.id;
+  //   song.key =
+  //     playlist.id + "-" + composer.id + "-" + salt + "-" + song.fileName;
 
-    console.log("uploading file");
-    // Take song uploaded by web form and send it AWS S3
-    var resp = await AmazonService.UploadFile(song, file_uri);
+  //   console.log("uploading file");
+  //   // Take song uploaded by web form and send it AWS S3
+  //   var resp = await AmazonService.UploadFile(song, file_uri);
 
-    console.log("creating file");
-    var songResponse = await db.songs.create(song);
+  //   console.log("creating file");
+  //   var songResponse = await db.songs.create(song);
 
-    console.log("finished");
+  //   console.log("finished");
 
-    return songResponse;
-  },
+  //   return songResponse;
+  // },
   AddSongToComposer: async function(song, file) {
     // As we are uploading data to S3, read the file info and duration.
 
-    console.log("Adding song to composer");
-
     console.log("uploading file");
+
     // Take song uploaded by web form and send it AWS S3
     var resp = await AmazonService.UploadFile(song, file);
 
@@ -107,7 +106,7 @@ module.exports = {
     return await db.songs.findAll({ where: { playlist_id: playlist.id } });
   },
   RemoveComposer: async function(composer) {
-    var user = db.users.findById(composer.user_id);
+    var user = await db.users.findById(composer.user_id);
     await composer.destroy(); // remove composer first before removing user otherwise a foreign key constraint error will occur.
     await user.destroy();
   },

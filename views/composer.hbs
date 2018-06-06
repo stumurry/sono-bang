@@ -344,13 +344,11 @@
                                     <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
                                 </audio>
                             </td>
-                            <td >
-                                <button song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-playlist" type="button">Add to Playlist</button>
+                            <td>
+                                <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-song-to-playlist" uk-toggle='target:#add-song-to-playlist'
+                                    type="button">Add to Playlist</button>
                                 <button song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" type="button">X</button>
-
-                                
                             </td>
-                            
                         </tr>
                         {{/each}}
                     </tbody>
@@ -365,28 +363,7 @@
             <h3 class="uk-card-title">Created Playlists</h3>
             <h3 class="uk-card-title"></h3>
             <button class='uk-button uk-button-default addButton' type='button' uk-toggle='target:#new-playlist'>New Playlist</button>
-            <div id='new-playlist' uk-modal>
-                <div class='uk-modal-dialog uk-modal-body'>
 
-                    <form action="/composer/playlist" method="post" class="uk-form-stacked">
-                        <input type="hidden" value="{{key}}" name="key" />
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="form-stacked-text">Playlist Name</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input" type="text" name="name">
-                            </div>
-                        </div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label" for="form-stacked-text">Genre</label>
-                            <div class="uk-form-controls">
-                                <input class="uk-input" type="text" name="genre">
-                            </div>
-                        </div>
-                        <button class="uk-button uk-button-primary" type="submit">Create Playlist</button>
-                    </form>
-
-                </div>
-            </div>
             <table class="uk-table uk-table-justify uk-table-divider">
                 <thead>
                     <tr>
@@ -422,38 +399,7 @@
     </div>
 </div>
 
-<div id='send-playlist' uk-modal>
-    <div class='uk-modal-dialog uk-modal-body'>
 
-        <h2>Copy this hyperlink</h2>
-        <p>http://www.sonobang.com/person/playlist</p>
-        <!-- <form class="uk-form-stacked">
-                        <div class="uk-margin uk-align-center">
-                                <label class="uk-form-label" id ='playlist-name' for="form-stacked-text"></label>
-                                
-                            </div>
-     
-                    <div class="uk-margin">
-                        <label class="uk-form-label" id ='recipient' for="form-stacked-text">Recipient</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="form-stacked-text" type="text" placeholder="Who are you trying to impress?">
-                        </div>
-                    </div>
-                    
-                    <div class="uk-margin">
-                        <label class="uk-form-label" id='message' for="form-stacked-text">Message</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="form-stacked-text" type="text" placeholder="Make it simple and sweet.">
-                        </div>
-                    </div>
-     
-     
-     
-                    <button class="uk-button uk-button-primary" type="button">Send playlist</button>
-     
-                </form> -->
-    </div>
-</div>
 
 
 <script>
@@ -462,16 +408,11 @@
     $(document).ready(() => {
         var key = '{{key}}';
         $('.delete-song').on('click', (evt) => {
-
-            console.log(evt.target)
-            var id = $(evt.target).attr('song-id');
-            console.log(id)
-            console.log('Deleting ID=' + id);
             $.ajax({
                 url: '/composer/song/' + id + '?' + $.param({ "key": key }),
                 type: 'DELETE',
-                success: successDelete,
-                error: deleteError,
+                success: () => window.location = '/composer/' + key,
+                error: () => alert('Error Deleting Resource.'),
                 statusCode: {
                     401: function () {
                         window.location = '/me/login';
@@ -492,18 +433,14 @@
 
         });
 
-
-        function successDelete() {
-            window.location = '/composer/' + key;
-        }
-        function deleteError() {
-            alert('Error deleting resource');
-        }
+        $('.add-playlist').on('click', (evt) => {
+            var id = $(evt.target).attr('song-id');
+        });
 
         var bar = document.getElementById('js-progressbar');
 
         UIkit.upload('.js-upload', {
-            // name  : 'asdf'
+
             url: 'song',
             multiple: true,
             params: { key: key },
@@ -558,7 +495,114 @@
             }
 
         });
+
+        var songId = 0
+
+        $('.add-song-to-playlist').on('click', (evt) => {
+
+            var songTitle = $(evt.target).attr('song-title');
+            songId = $(evt.target).attr('song-id');
+
+            console.log(songTitle);
+            console.log(songId);
+
+            $('#song-title').html(songTitle);
+
+            $('#song-id').html(songId);
+
+
+        });
+
+        $('.save-song-to-playlist').on('click', (evt) => {
+
+console.log('saving song to playlist');
+            console.log(key);
+            console.log(songId);
+
+            $.ajax({
+                url: '/composer/playlist-songs',
+                type: 'POST',
+                contentType: "application/json",
+                data : {
+                    'key' : key,
+                    'song-id' : songId,
+                },
+                statusCode: {
+                    401: function () {
+                        window.location = '/me/login';
+                    },
+                    400: function (o) {
+                        alert(o.message);
+                    },
+                    200: function (o) {
+                        window.location = '/composer/' + key;
+                    }
+                }
+            });
+        });
     });
 
 
+
+
+
+
 </script>
+
+
+<!-- modals -->
+<div id='new-playlist' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <form action="/composer/playlist" method="post" class="uk-form-stacked">
+            <input type="hidden" value="{{key}}" name="key" />
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Playlist Name</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" type="text" name="name">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Genre</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" type="text" name="genre">
+                </div>
+            </div>
+            <button class="uk-button uk-button-primary" type="submit">Create Playlist</button>
+        </form>
+
+    </div>
+</div>
+
+<div id='send-playlist' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <h2>Copy this hyperlink</h2>
+        <p>http://www.sonobang.com/person/playlist</p>
+
+    </div>
+</div>
+
+<div id='add-song-to-playlist' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <h1 id="song-title"></h1>
+
+        {{!--
+        <form action="/composer/playlist-songs" method="post" class="uk-form-stacked"> --}} {{!--
+            <input id="song-id" type="hidden" name="song-id" value="{{key}}">
+            <input type="hidden" name="key" value="{{key}}"> --}}
+
+            <ul class="uk-list uk-list-line">
+                {{#each playlists}}
+                <li>
+                    <input type="checkbox" name="playlist-{{id}}" class="uk-checkbox"> {{name}} | {{genre}}
+                </li>
+                {{/each}}
+            </ul>
+
+            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="button">Save</button>
+            {{!-- </form> --}}
+
+    </div>
+</div>

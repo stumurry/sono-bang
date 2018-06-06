@@ -33,4 +33,5 @@ module.exports = {
     db : db,
     producerService : producerService,
     composerUtil : composerUtil,
+    keys : keys,
 }

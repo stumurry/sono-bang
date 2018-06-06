@@ -47,8 +47,8 @@ describe("This person", function() {
 
     function ValidLoginForm() {
       return {
-        username: 'test',
-        password: 'test'
+        username: 'stu',
+        password: 'stu'
       
       };
     }
