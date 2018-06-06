@@ -1,0 +1,279 @@
+ /***** GLOBAL STYLES *****/
+
+ body {
+    padding-top: 54px;
+    background-image: url("/images/bg_diamond.png");
+    height: 100%;
+}
+
+.logo {
+    color: #714256;
+    font-weight: bold;
+}
+
+nav a {
+    border-radius: 5px;
+    margin: 15px 50px 0 0;
+    color: #714256 !important;
+}
+
+nav a:hover {
+    background: #79b6b8;
+    font-weight: bold;
+    color: #fff !important;
+    border-radius: 5px;
+}
+
+.uk-active a {
+    font-weight: bold;
+}
+
+.uk-navbar-dropdown {
+    /* padding-right: 5px !important; */
+    border-radius: 5px;
+    padding: 0 0 15px 0;
+    width: 123px;
+}
+
+.uk-navbar-dropdown a {
+    width: 100%;
+    text-align: center;
+
+}
+
+
+
+/***** LIBRARY-PLAYLIST PAGE *****/
+
+.addButton {
+    border: #714256 1px solid !important;
+    border-radius: 3px;
+    background: #714256 !important;
+    color: #fff;
+}
+
+.addButton:hover {
+    color: #fff;
+    background: #ef8321 !important;
+}
+
+th {
+    color: #714256 !important;
+    font-weight: 500 !important;
+}
+
+td button {
+    border: #714256 1px solid !important;
+    border-radius: 3px !important;
+    margin-right: 10px !important;
+    background: rgba(121, 182, 184, 0.5) !important;
+}
+
+.delete {
+    padding: 0 7px;
+}
+
+.delete:hover {
+    background: rgb(226, 68, 68) !important;
+}
+
+td button:hover {
+    border-color: #714256 !important;
+    background: #ef8321 !important;
+    border-radius: 3px;
+}
+
+td a {
+    padding: 3px !important;
+}
+
+td a:hover {
+    background: #ef8321;
+    color: #714256 !important;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.play-icon {
+    margin-right: 10px;
+}
+
+tr {
+    border-top-color: #ef8321 !important;
+}
+
+#send-playlist p,
+#send-playlist h2 {
+    color: #fff;
+    text-align: center;
+}
+
+.uk-modal-body {
+    background: #714256;
+}
+
+.modal-dragDrop {
+    color: #fff;
+    font-size: 16pt;
+}
+
+.uk-modal-body label {
+    color: #fff;
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+.uk-modal-body button {
+    background: #79b6b8;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 14pt;
+}
+
+.modal-dragDrop button {
+    margin-top: 25px;
+}
+
+
+.uk-modal-body button:hover {
+    background: #ef8321;
+}
+
+/* .uk-form-custom */
+
+.addSong {
+    border: #714256 1px solid !important;
+    border-radius: 3px;
+    background: #714256 !important;
+    color: #fff;
+}
+
+.uk-form-custom:hover {
+    /* .addSong:hover { */
+    font-weight: 500 !important;
+    border-radius: 3px !important;
+    background-color: #ef8321 !important;
+}
+
+.main-dragDrop {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.card-BG {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+
+/***** PRICING PAGE *****/
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 50px 0;
+}
+
+header h2 {
+    font-weight: bold;
+    color: #714256;
+    font-size: 36pt;
+}
+
+.columns {
+    box-sizing: border-box;
+    float: left;
+    width: 33.3%;
+    padding: 18px;
+    margin-bottom: 200px;
+}
+
+.columns li {
+    background: #fff;
+}
+
+.price {
+    list-style-type: none;
+    border: 2px #714256 solid;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.price:hover {
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+}
+
+.price .package {
+    background-color: #714256;
+    border-bottom: #714256;
+    color: #fff;
+    font-size: 25px;
+}
+
+.price li {
+    padding: 20px;
+    text-align: center;
+}
+
+.price .grey {
+    background-color: #79b6b8;
+    font-size: 20px;
+    font-weight: 500;
+    color: #714256;
+}
+
+.button {
+    background-color: #ef8321;
+    border: 1px #714256 solid;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+a:hover {
+    text-decoration: none;
+    background: #714256;
+    color: #fff;
+}
+
+@media only screen and (max-width: 700px) {
+    .columns {
+        width: 100%;
+    }
+}
+
+
+/***** CONTACT *****/
+
+.container {
+    margin: 10px 100px;
+}
+
+
+/***** PROFILE *****/
+
+.profile {
+    margin: 0 auto;
+    margin-top: 25px;
+    margin-bottom: 150px;
+    width: 600px;
+}
+
+.profilePic,
+.memberName {
+    float: left;
+}
+
+.memberName {
+    width: 350px;
+    margin-top: 25px;
+}
+
+strong {
+    color: #714256;
+}

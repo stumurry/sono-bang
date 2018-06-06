@@ -203,6 +203,12 @@ h3{
     <div class="logo">
         <h3>SonoBang Login</h3>
     </div>
+    <ul>
+        {{#each errors}}
+        <li class="error">{{msg}}</li>
+        {{/each}}
+
+    </ul>
     <div class="login-item">
         <form action="" method="post" class="form form-login">
             <div class="form-field">

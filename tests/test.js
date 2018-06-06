@@ -17,13 +17,13 @@ describe("top", function () {
     // importTest("c", './routes/me-routes-test.js');
 
     // services
-    importTest("d", './services/composer-test.js');
+    // importTest("d", './services/composer-test.js');
     // importTest("e", './services/me-test.js');
     // importTest("f", './services/producer-test.js');
 
     //utils
 
-    // importTest("g", './utils/encryption-test.js');
+    importTest("g", './utils/encryption-test.js');
 
     after(function () {
         console.log("after all tests");

@@ -14,20 +14,20 @@ router.get("/login", (req, res, next) => {
 router.post(
   "/login",
   [
-    check("username").isLength({ min: 1 }),
-    check("password", "please enter a password").isLength({ min: 1 })
+    check("username").isLength({ min: 3 }),
+    check("password", "please enter a password").isLength({ min: 3 })
   ],
   (req, res, next) => {
     console.log("start validating...");
-
     console.log(req.body);
 
     const errors = validationResult(req);
+
+    console.log(errors.mapped());
+
     if (!errors.isEmpty()) {
-      console.log("errors...");
+      console.log('has errors');
       console.log(errors.mapped());
-      // console.log(errors.mapped());
-      // console.log(req.body)
       return res
         .status(422)
         .render("login", { errors: errors.mapped(), body: req.body });
@@ -38,6 +38,8 @@ router.post(
       .then(_ => { return composerUtil.encrypt(_)} )
       .then(_ => res.redirect("/composer/" + _) )
       .catch(_ => {
+        console.log(_);
+        errors = { "server" : _ }
         return res
           .status(400)
           .render("login", { errors: errors.mapped(), body: req.body });
@@ -52,46 +54,55 @@ router.get("/register", (req, res, next) => {
 router.post(
   "/register",
   [
-    check("username")
+    // General error messages can be given as a 2nd argument in the check APIs
+    check(
+      "username",
+      "username must be at least 3 chars long"
+    )
+      .isLength({ min: 3 }),
+
+    check("email")
       // Every validator method in the validator lib is available as a
       // method in the check() APIs.
       // You can customize per validator messages with .withMessage()
       .isEmail()
-      .withMessage("must be an email")
+      .withMessage("email must a valid email.")
 
       // Every sanitizer method in the validator lib is available as well!
       .trim()
-      .normalizeEmail()
+      .normalizeEmail(),
 
       // ...or throw your own errors using validators created with .custom()
-      .custom(value => {
-        return findUserByEmail(value).then(user => {
-          throw new Error("this email is already in use");
-        });
-      }),
+      // .custom(value => {
+      //   return findUserByEmail(value).then(user => {
+      //     throw new Error("this email is already in use");
+      //   });
+      // }),
 
     // General error messages can be given as a 2nd argument in the check APIs
     check(
       "password",
-      "passwords must be at least 5 chars long and contain one number"
+      "passwords must be at least 3 chars long"
     )
-      .isLength({ min: 5 })
-      .matches(/\d/),
+      .isLength({ min: 3 }),
 
-    check("name", "a name must be supplied").isLength({ min: 1 })
+    check("name", "name must be at least 3 chars long")
+    .isLength({ min: 3 })
   ],
   (req, res, next) => {
+    console.log('body');
+    console.log(req.body);
     // Get the validation result whenever you want; see the Validation Result API for all options!
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      // //   console.log('validation errors');
+      console.log('validation errors');
       // console.log(errors.mapped());
-      // console.log(req.body)
+      console.log(errors.mapped())
       // return res.status(422).json({ errors: errors.mapped() });
 
       return res
         .status(422)
-        .render("register", { errors: errors.mapped(), body: req.body });
+        .render("register", { errors: errors.mapped(), body : req.body });
     }
 
     var composer = {

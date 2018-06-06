@@ -18,29 +18,27 @@ router.get("/song-upload/", async (req, res, next) => {
 });
 
 // Display Composer's landing page
-router.get("/:id", async (req, res, next) => {
+router.get("/:key", async (req, res, next) => {
   try {
-    var id = req.params.id;
-    console.log("received an id of " + i + " for /composer/:id");
-    k = composerUtil.decrypt(id);
-
+    var key =  req.params.key;
+    console.log(key);
+    k = composerUtil.decrypt(key);
+    console.log(k);
     if (!k.composer.ispaid) {
-      res.redirect("/composer/pricing/" + id);
+      res.redirect("/composer/pricing/" + key);
     }
 
     var playlists = await composerService.ListPlayLists(k.composer);
     var songs = await composerService.ListSongsByComposer(k.composer);
-    // console.log("songs");
-    // console.log(songs);
 
     return res.render("composer", {
-      key: id,
+      key: key,
       playlists: playlists,
       songs: songs
     });
   } catch (ex) {
     console.log("Oops, authentication failed.");
-    console.log("redirecting to login");
+    console.log(ex);
     return res.redirect("/me/login");
   }
 });
@@ -110,8 +108,10 @@ router.post("/song", async (req, res, next) => {
 
   form.parse(req, (err, fields, files) => {
     var ffff = files["files[]"];
-    ProcessFileUploadForm(req, fields, files, ffff)
+
+    ProcessFileUploadForm(fields, ffff)
       .then(s => {
+        
         return res.status(200).send({ success: true });
       })
       .catch(ex => {
@@ -122,14 +122,14 @@ router.post("/song", async (req, res, next) => {
   });
 });
 
-async function ProcessFileUploadForm(req, fields, files, ffff) {
+async function ProcessFileUploadForm(fields, ffff) {
 
   var _ = composerUtil.decrypt(fields.key);
 
-  var song = composerUtil.GetSongInformation(ffff.path, _.composer);
+  var song = await composerUtil.GetSongInformation(ffff.path, _.composer);
 
   await composerService.AddSongToComposer(song, ffff.path);
-
+  
 }
 
 router.delete("/song/:id", async (req, res, next) => {
