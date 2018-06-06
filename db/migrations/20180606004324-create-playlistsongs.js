@@ -11,6 +11,9 @@ module.exports = {
       playlist_id: {
         type: Sequelize.INTEGER
       },
+      song_id: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

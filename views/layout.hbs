@@ -23,7 +23,8 @@
     <script src="https://use.typekit.net/rjb4unc.js"></script>
     <script>try { Typekit.load({ async: true }); } catch (e) { }</script>
 
-
+    <!-- UIKit are capturing events,  even after $(document).ready() executes, so we have to place it right after the UI kit load so we are garunteed our events gets fired. --> 
+    <script src="/javascripts/composer.js"></script>
 
 </body>
 

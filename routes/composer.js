@@ -67,6 +67,8 @@ router.post("/playlist-songs", async (req, res, next) => {
 
       console.log("playListIds");
       console.log(playListIds);
+
+      res.statusCode(400).send("Hello");
     } catch (ex) {
       console.log("ouch");
       console.log(ex);
@@ -81,9 +83,6 @@ router.post("/playlist-songs", async (req, res, next) => {
     res.status(401).send(JSON.stringify({ message: "Unauthorized" }, null, 3));
   }
 
-  var key = req.body.key;
-
-  return res.render("composer", { key: key });
 });
 
 // Add playlist
@@ -104,13 +103,13 @@ router.post("/playlist", (req, res, next) => {
 router.post("/song", async (req, res, next) => {
   var form = new formidable.IncomingForm();
 
-  // console.log(form);
-
   form.parse(req, (err, fields, files) => {
     var ffff = files["files[]"];
 
     ProcessFileUploadForm(fields, ffff)
       .then(s => {
+
+        
         
         return res.status(200).send({ success: true });
       })

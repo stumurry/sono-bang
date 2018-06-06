@@ -32,8 +32,6 @@
         <div class="uk-card uk-card-default uk-card-body card-BG" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
             <h3 class="uk-card-title">Your Songs</h3>
             <div class="js-upload uk-placeholder main-dragDrop">
-
-
                 <p>
                     <span class="uk-text-middle uk-text-small">To add song -- drag & drop here or</span>
                 </P>
@@ -121,152 +119,6 @@
 </div>
 
 
-<script>
-
-    // Using Jquery until we go into Angular or React.
-    $(document).ready(() => {
-        var key = '{{key}}';
-        $('.delete-song').on('click', (evt) => {
-            $.ajax({
-                url: '/composer/song/' + id + '?' + $.param({ "key": key }),
-                type: 'DELETE',
-                success: () => window.location = '/composer/' + key,
-                error: () => alert('Error Deleting Resource.'),
-                statusCode: {
-                    401: function () {
-                        window.location = '/me/login';
-                    },
-                    400: function (o) {
-                        alert(o.error);
-                    },
-                    200: function (o) {
-                        window.location = '/composer/' + key;
-                    }
-                }
-            });
-        });
-
-        $('.play-song').on('click', (evt) => {
-            var key = $(evt.target).attr('song-key');
-            alert(key);
-
-        });
-
-        $('.add-playlist').on('click', (evt) => {
-            var id = $(evt.target).attr('song-id');
-        });
-
-        var bar = document.getElementById('js-progressbar');
-
-        UIkit.upload('.js-upload', {
-
-            url: 'song',
-            multiple: true,
-            params: { key: key },
-
-            beforeSend: function () {
-                console.log('beforeSend', arguments);
-            },
-            beforeAll: function () {
-                console.log('beforeAll', arguments);
-            },
-            load: function () {
-                console.log('load', arguments);
-            },
-            error: function () {
-                alert('Error');
-                console.log('error', arguments);
-            },
-            complete: function () {
-                console.log('complete', arguments);
-            },
-
-            loadStart: function (e) {
-                console.log('loadStart', arguments);
-
-                bar.removeAttribute('hidden');
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-
-            progress: function (e) {
-                console.log('progress', arguments);
-
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-
-            loadEnd: function (e) {
-                console.log('loadEnd', arguments);
-
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-
-            completeAll: function () {
-                console.log('completeAll', arguments);
-
-                setTimeout(function () {
-                    bar.setAttribute('hidden', 'hidden');
-                }, 1000);
-
-                window.location = '/composer/' + key;
-            }
-
-        });
-
-        var songId = 0
-
-        $('.add-song-to-playlist').on('click', (evt) => {
-
-            var songTitle = $(evt.target).attr('song-title');
-            songId = $(evt.target).attr('song-id');
-
-            console.log(songTitle);
-            console.log(songId);
-
-            $('#song-title').html(songTitle);
-
-            $('#song-id').html(songId);
-
-
-        });
-
-        $('.save-song-to-playlist').on('click', (evt) => {
-
-            $.ajax({
-                url: '/composer/playlist-songs',
-                type: 'POST',
-                contentType: "application/json",
-                data: {
-                    'key': key,
-                    'song-id': songId,
-                },
-                statusCode: {
-                    401: function () {
-                        window.location = '/me/login';
-                    },
-                    400: function (o) {
-                        alert(o.message);
-                    },
-                    200: function (o) {
-                        window.location = '/composer/' + key;
-                    }
-                }
-            });
-        });
-
-        {{!-- alert('Loaded Correctly') --}}
-    });
-
-
-
-
-
-
-</script>
-
-
 <!-- modals -->
 <div id='new-playlist' uk-modal>
     <div class='uk-modal-dialog uk-modal-body'>
@@ -305,10 +157,10 @@
 
         <h1 id="song-title"></h1>
 
-        {{!--
-        <form action="/composer/playlist-songs" method="post" class="uk-form-stacked"> --}} {{!--
-            <input id="song-id" type="hidden" name="song-id" value="{{key}}">
-            <input type="hidden" name="key" value="{{key}}"> --}}
+
+        <form action="/composer/playlist-songs" method="post" class="uk-form-stacked">
+            <input id="song-id" type="hidden" name="song-id">
+            <input type="hidden" name="key" value="{{key}}">
 
             <ul class="uk-list uk-list-line">
                 {{#each playlists}}
@@ -318,8 +170,12 @@
                 {{/each}}
             </ul>
 
-            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="button">Save</button>
-            {{!-- </form> --}}
+            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Save</button>
+        </form>
 
     </div>
 </div>
+
+<script>
+    key='{{key}}';
+</script>

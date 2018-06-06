@@ -164,8 +164,6 @@ describe("/composer", function() {
         .catch(_ => done(_));
     });
 
-    
-
     function testDBProperties(song, testsong) {
       // console.log(song)
       // To Do: Use sprintf or string.format() implementation late when time permits like found in C#
@@ -186,25 +184,6 @@ describe("/composer", function() {
       // Be sure to add new fields to db/models/songs.js
     }
 
-    // async function testKeyNomenclature(testsong, salt) {
-    //   var prefix = "" + playlist.id;
-
-    //   // ** Example Filename(Key) **
-    //   // <PLAYLIST_ID>-<COMPOSER_ID>-<SALT>-<FILENAME>.<EXT>
-    //   var key =
-    //     prefix + "-" + composer.id + "-" + salt + "-" + testsong.fileName;
-    //   console.log("testKeyNomenclature");
-    //   console.log(key);
-    //   var files = await amazonService.ListFiles(prefix);
-
-    //   console.log(files["Contents"]);
-
-    //   expect(files["Contents"][0]).to.include(
-    //     { Key: key },
-    //     "Filename(Key) not found in S3 Bucket"
-    //   );
-    // }
-
     it("should be able to list songs by composer", function(done) {
 
       var hasException = false;
@@ -219,6 +198,26 @@ describe("/composer", function() {
             "Intended song list should have one record in it. Songs should have reference a composer."
           );
         })
+        .then(_ => done())
+        .catch(_ => done(_));
+    });
+
+    it("should be able to add and remove a song from a playlist", function(done) {
+      
+      composerService
+        .AddSongToPlaylist(song, playlist)
+        .then(async _ => await composerService.ListSongsInPlayList(playlist))
+        .then(_ => { console.log('Listing Songs in Playlist'); console.log(_);  return _ })
+        .then(_ => expect(_.length).is.greaterThan(
+          0,
+          "Intended playlist should have one song in it."
+        ))
+        .then(async _ => await composerService.RemoveSongFromPlaylist(song, playlist))
+        .then(async _ => await composerService.ListSongsInPlayList(playlist))
+        .then(_ => expect(_.length).is.eq(
+          0,
+          "Intended playlist should no songs in it."
+        ))
         .then(_ => done())
         .catch(_ => done(_));
     });
