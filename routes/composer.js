@@ -12,7 +12,6 @@ const keys = require("../keys");
 
 var formidable = require("formidable");
 
-
 router.get("/song-upload/", async (req, res, next) => {
   return res.render("song-upload", { key: req.query.key });
 });
@@ -20,20 +19,37 @@ router.get("/song-upload/", async (req, res, next) => {
 // Display Composer's landing page
 router.get("/:key", async (req, res, next) => {
   try {
-    var key =  req.params.key;
-    console.log(key);
+    var key = req.params.key;
     k = composerUtil.decrypt(key);
-    console.log(k);
     if (!k.composer.ispaid) {
       res.redirect("/composer/pricing/" + key);
     }
 
     var playlists = await composerService.ListPlayLists(k.composer);
+
+    var playlistwithsongs = [];
+    for (var ppp in playlists) {
+      var inplaylist = playlists[ppp].dataValues;
+
+      var songs = await composerService.ListSongsInPlayList(inplaylist);
+      console.log('length');
+      console.log(songs.length);
+      
+      var asdf = songs.map(d => d.dataValues)
+
+      inplaylist.songs = asdf;
+      playlistwithsongs.push(inplaylist);
+    }
+   
+
+    console.log('playlistwithsongs');
+    console.log(playlistwithsongs);
+
     var songs = await composerService.ListSongsByComposer(k.composer);
 
     return res.render("composer", {
       key: key,
-      playlists: playlists,
+      playlists: playlistwithsongs,
       songs: songs
     });
   } catch (ex) {
@@ -52,11 +68,10 @@ router.get("/", function(req, res, next) {
 router.post("/playlist-songs", async (req, res, next) => {
   // We need two try/catch blocks because authentication takes first priority.  Next comes business logic.
   try {
-    console.log("req.body");
-    var id = req.body.key;
+    var key = req.body.key;
+    var songId = req.body["song-id"];
 
-    console.log(req.body);
-    k = composerUtil.decrypt(id);
+    k = composerUtil.decrypt(key);
 
     try {
       // Dealing with checkboxes here.  playlist-2 means playlist with id of 2
@@ -65,24 +80,30 @@ router.post("/playlist-songs", async (req, res, next) => {
         .map(_ => _.replace("playlist-", ""))
         .map(_ => parseInt(_));
 
-      console.log("playListIds");
-      console.log(playListIds);
+      playListIds.forEach(
+        async playlist_id =>
+          await composerService.AddSongToPlaylist(
+            { id: songId },
+            { id: playlist_id }
+          )
+      );
 
-      res.statusCode(400).send("Hello");
+      res.redirect("/composer/" + key);
     } catch (ex) {
       console.log("ouch");
       console.log(ex);
-      res
-        .status(400)
-        .send(
-          JSON.stringify({ message: "Failed to add song to playlist" }, null, 3)
-        );
+      // res
+      //   .status(400)
+      //   .send(
+      //     JSON.stringify({ message: "Failed to add song to playlist" }, null, 3)
+      //   );
+      res.redirect("/composer/" + key + "?error=PlayListAddFailed");
     }
   } catch (ex) {
-    console.log("oops");
-    res.status(401).send(JSON.stringify({ message: "Unauthorized" }, null, 3));
+    console.log("oops.  Unauthenticated");
+    // res.status(401).send(JSON.stringify({ message: "Unauthorized" }, null, 3));
+    res.redirect("/me/login");
   }
-
 });
 
 // Add playlist
@@ -108,9 +129,6 @@ router.post("/song", async (req, res, next) => {
 
     ProcessFileUploadForm(fields, ffff)
       .then(s => {
-
-        
-        
         return res.status(200).send({ success: true });
       })
       .catch(ex => {
@@ -122,13 +140,11 @@ router.post("/song", async (req, res, next) => {
 });
 
 async function ProcessFileUploadForm(fields, ffff) {
-
   var _ = composerUtil.decrypt(fields.key);
 
   var song = await composerUtil.GetSongInformation(ffff.path, _.composer);
 
   await composerService.AddSongToComposer(song, ffff.path);
-  
 }
 
 router.delete("/song/:id", async (req, res, next) => {

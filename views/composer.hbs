@@ -98,10 +98,10 @@
                         <td class="uk-closed">
                             <a class="uk-accordion-title" href="#">{{name}}</a>
                             <div class="uk-accordion-content">
-                                <p>
-                                    <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
-                                <p>
-                                    <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                                {{#each songs}}
+                                    <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p>
+                                {{/each}}
+
                             </div>
                         </td>
                         <td>{{genre}}</td>
