@@ -45,59 +45,22 @@ module.exports = {
   },
 
   // Remember AWS only returns 1000 keys max.  Use `marker` or simply search by key name.
-  ListFiles: async function(prefix) {
+  ListFiles: async function(bucket, prefix) {
     var params = { Bucket: bucket, Prefix: prefix };
-    return s3.listObjectsV2(params).promise();
+    var resp = await s3.listObjectsV2(params).promise();
+    return resp.Contents;
   },
 
   ListAllFiles: async function(bucket) {
-    var resp =  await s3.listObjectsV2({ Bucket: bucket }).promise();
-
-    var oo = [];
-    await resp.Contents.forEach(async element => {
-
-      
-      var o = await s3.headObject({ Bucket : bucket, Key : element.Key}).promise();
-      console.log(o);
-
-      oo.push(o);
-      
-    });
-
-    return { Contents: resp.Contents, HeadObjects: oo };
-    
+    return  await s3.listObjectsV2({ Bucket: bucket }).promise();    
   },
 
   // var file = { Bucket: "sonobang-test", Key: f.Key };
   DeleteFile: async function(bucket, key) {
-    // Require promise here instead of async because AWS-SDK uses
-    // old school callback pattern instead of returning a Promise
-    return new Promise((resolve, reject) => {
-      console.log("Deleting Object");
-      console.log("key");
-      console.log(key);
-      s3.deleteObject({ Key: key, Bucket: bucket }, function(err, data) {
-        if (err) {
-          reject(err);
-        } // an error occurred
-        else {
-          resolve(data);
-        } // successful response
-      });
-    });
+    return await s3.deleteObject({ Key: key, Bucket: bucket }).promise();
   },
 
   GetCORS: async function(bucket) {
-    return new Promise((resolve, reject) => {
-      console.log("Getting CORS");
-      s3.getBucketCors({ Bucket: bucket }, function(err, data) {
-        if (err) {
-          reject(err);
-        } // an error occurred
-        else {
-          resolve(data);
-        } // successful response
-      });
-    });
+    return await s3.getBucketCors({ Bucket: bucket }).promise();
   }
 };

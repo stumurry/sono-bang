@@ -1,6 +1,6 @@
 const db = require("../db/models");
 
-var AmazonService = require("./AmazonService");
+var amazonService = require("./AmazonService");
 
 var composerUtil = require("../utils/ComposerUtil");
 
@@ -76,12 +76,12 @@ module.exports = {
     console.log("uploading file");
 
     // Take song uploaded by web form and send it AWS S3
-    var resp = await AmazonService.UploadFile(song, file);
+    var resp = await amazonService.UploadFile(song, file);
 
-    console.log("creating file");
+    // console.log("creating file");
     var songResponse = await db.songs.create(song);
 
-    console.log("finished");
+    // console.log("finished");
 
     return songResponse;
   },
@@ -97,8 +97,23 @@ module.exports = {
     return await db.songs.findAll({ where: { id: { [Op.in] : songIds } } });
   },
   RemoveComposer: async function(composer) {
+    var songs = await db.songs.findAll({where : { composer_id : composer.id }});
+    console.log(songs);
+    for (var i in songs) {
+      var s = songs[i];
+      console.log(s);
+      try {
+        await amazonService.DeleteFile(s.bucket, s.key);
+      } catch(ex) {
+        console.log('unable to delete aws resource: ' + s.key);
+        console.log(ex);
+      }
+    }
     var user = await db.users.findById(composer.user_id);
-    await composer.destroy(); // remove composer first before removing user otherwise a foreign key constraint error will occur.
+    // remove composer first before removing user otherwise a foreign key constraint error will occur.
+    // composer table foreign keys are `cascade on delete`, so playlists and songs joined to them will also be deleted automatically.
+    await composer.destroy();
+
     await user.destroy();
   },
   RemovePlaylist: async function(playlist) {
@@ -106,7 +121,7 @@ module.exports = {
   },
   RemoveSong: async song => {
     var song = await db.songs.findById(song.id);
-    var resp = await AmazonService.DeleteFile(song.bucket, song.key);
+    var resp = await amazonService.DeleteFile(song.bucket, song.key);
     return await song.destroy();
   },
   RemoveSongFromPlaylist : async function(song, playlist) {
@@ -116,20 +131,26 @@ module.exports = {
   UpdatePayment: async composer => {
     console.log("UpdatePayment");
     var composer = await db.composers.findById(composer.id);
-    console.log(composer);
-    composer.ispaid = true;
+    // console.log(composer);
+    // composer.ispaid = true;
 
-    console.log("updating composer");
+    // console.log("updating composer");
     composer = await composer.update({ ispaid: true });
-    console.log(composer);
+    // console.log(composer);
 
-    console.log("findone");
+    // console.log("findone");
     var user = db.users.findById(composer.user_id);
-    console.log(user);
+    // console.log(user);
 
     return composerUtil.encrypt({
       user: user["dataValues"],
       composer: composer["dataValues"]
     });
+  },
+  ListPlaylistReferencesBySong: async (song) => {
+    return await db.playlistsongs.findAll({ where : { 'song_id' : song.id }});
+  },
+  ListPlaylistReferencesByPlaylist: async (playlist) => {
+    return await db.playlistsongs.findAll({ where : { 'playlist_id' : playlist.id }});
   }
 };

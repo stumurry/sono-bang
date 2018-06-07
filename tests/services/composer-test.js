@@ -29,6 +29,13 @@ describe("/composer", function() {
     var song = null;
     // var S3Object = { Bucket: "sonobang-test", Key: f.Key };
     var S3Object = null;
+    var bucket = "sonobang-test";
+    var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";
+
+    var testplaylist = {
+      name: "Stu's custom playlist# 1",
+      description: "A playlist I designed for a potential producer."
+    };
 
     after(function(done) {
       console.log("Cleaning up database...");
@@ -115,10 +122,6 @@ describe("/composer", function() {
     }
 
     it("should be able to create a playlist", function(done) {
-      var testplaylist = {
-        name: "Stu's custom playlist# 1",
-        description: "A playlist I designed for a potential producer."
-      };
       composerService
         .CreatePlayList(composer, testplaylist)
         .then(p => {
@@ -126,7 +129,7 @@ describe("/composer", function() {
           playlist = p;
           return p; // make available for other promise chain
         })
-        .then(async p => console.log(await amazonService.ListFiles("" + p.id)))
+        // .then(async p => console.log(await amazonService.ListFiles(bucket, "" + p.id)))
         .then(_ => done())
         .catch(_ => done(_));
     });
@@ -143,26 +146,30 @@ describe("/composer", function() {
 
     // When a user drags and drops a song onto the screen.  This file should be added to songlist.
     it("should be able to add song to composer", function(done) {
-      var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";
+      // S3 buckets offers only a `prefix` attribute for seaching.
+      // S3 limits the number of buckets you can create and uses a Global Namespace.
+      // We need a way to tie this file to a database entry.
+      AddSong(composer)
+        .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
+        .then(async _ => testDBProperties(song, await GetSongInfo()))
+        // .then(_ => testKeyNomenclature(testsong, salt))
+        // .then(_ => console.log(song))
+        .then(_ => amazonService.DeleteFile("sonobang-test", song.key)) // Done uploading, now delete it.
+        .then(_ => done())
+        .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
+    });
+
+    async function GetSongInfo() {
+      
       // var fName = "./tests/data/airborne.mp3";
 
-      composerUtil.GetSongInformation(fName, composer)
-        .then(testsong => {
-          // S3 buckets offers only a `prefix` attribute for seaching.
-          // S3 limits the number of buckets you can create and uses a Global Namespace.
-          // We need a way to tie this file to a database entry.
-          composerService
-            .AddSongToComposer(testsong, fName)
-            .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
-            .then(_ => testDBProperties(song, testsong))
-            // .then(_ => testKeyNomenclature(testsong, salt))
-            .then(_ => console.log(song))
-            .then(_ => amazonService.DeleteFile('sonobang-test', song.key)) // Done uploading, now delete it.
-            .then(_ => done())
-            .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
-        })
-        .catch(_ => done(_));
-    });
+      return await composerUtil.GetSongInformation(fName, composer);
+    }
+
+    async function AddSong(composer) {
+      var testsong = await GetSongInfo();
+      return await composerService.AddSongToComposer(testsong, fName);
+    }
 
     function testDBProperties(song, testsong) {
       // console.log(song)
@@ -170,7 +177,7 @@ describe("/composer", function() {
       var errorMsg =
         " property not found. Use Sequelize CLI to create a new migration and insert this field.";
       expect(song.name).to.equal(testsong.name, "name" + errorMsg);
-      expect(song.key).to.equal(testsong.key, "key" + errorMsg);
+      // expect(song.key).to.equal(testsong.key, "key" + errorMsg);
       expect(song.fileName).to.equal(testsong.fileName, "fileName" + errorMsg);
       expect(song.bucket).to.equal(testsong.bucket, "bucket" + errorMsg);
       expect(song.description).to.equal(
@@ -185,12 +192,10 @@ describe("/composer", function() {
     }
 
     it("should be able to list songs by composer", function(done) {
-
       var hasException = false;
       composerService
         .ListSongsByComposer(composer)
         .then(songs => {
-          
           // Songs should have references to boh playlist and composer
           var list = songs.filter(x => x.composer_id == composer.id);
           expect(list.length).is.greaterThan(
@@ -203,21 +208,28 @@ describe("/composer", function() {
     });
 
     it("should be able to add and remove a song from a playlist", function(done) {
-      
       composerService
         .AddSongToPlaylist(song, playlist)
         .then(async _ => await composerService.ListSongsInPlayList(playlist))
-        .then(_ => { console.log('Listing Songs in Playlist'); console.log(_);  return _ })
-        .then(_ => expect(_.length).is.greaterThan(
-          0,
-          "Intended playlist should have one song in it."
-        ))
-        .then(async _ => await composerService.RemoveSongFromPlaylist(song, playlist))
+        // .then(_ => {
+        //   console.log("Listing Songs in Playlist");
+        //   console.log(_);
+        //   return _;
+        // })
+        .then(_ =>
+          expect(_.length).is.greaterThan(
+            0,
+            "Intended playlist should have one song in it."
+          )
+        )
+        .then(
+          async _ =>
+            await composerService.RemoveSongFromPlaylist(song, playlist)
+        )
         .then(async _ => await composerService.ListSongsInPlayList(playlist))
-        .then(_ => expect(_.length).is.eq(
-          0,
-          "Intended playlist should no songs in it."
-        ))
+        .then(_ =>
+          expect(_.length).is.eq(0, "Intended playlist should no songs in it.")
+        )
         .then(_ => done())
         .catch(_ => done(_));
     });
@@ -225,15 +237,66 @@ describe("/composer", function() {
     it("should be able to remove song", function(done) {
       composerService
         .RemoveSong(song)
-        .then(_ => song = null)
+        .then(_ => composerService.ListPlaylistReferencesBySong(song)) // Are song_id's hanging around the playlistsongs reference table?
+        // .then(_ => { console.log('playlist references'); console.log(_); return _ } )
+        .then(_ =>
+          expect(_.length).is.eq(
+            0,
+            "Playlist Song reference table still shows a reference to this song.  It must be removed."
+          )
+        )
+        .then(_ => (song = null))
+        .then(_ => done())
+        .catch(_ => done(_));
+    });
+
+    it("should be able to remove a playlist", function(done) {
+      composerService
+        .RemovePlaylist(playlist)
+        .then(_ => composerService.ListPlaylistReferencesByPlaylist(playlist)) // Are song_id's hanging around the playlistsongs reference table?
+        .then(_ =>
+          expect(_.length).is.eq(
+            0,
+            "Playlist Song reference table still shows a reference to this playlist.  It must be removed."
+          )
+        )
+        .then(_ => (playlist = null))
         .then(_ => done())
         .catch(_ => done(_));
     });
 
     it("should be able to remove composer", function(done) {
-      composerService
-        .RemoveComposer(composer)
-        .then(_ => (composer = null, user = null))
+      composerService.CreatePlayList(composer, testplaylist)
+        .then(_ => (playlist = _))
+        .then(async _ => await AddSong(composer))
+        .then(_ => (song = _))
+        .then(async _ => await composerService.ListSongsByComposer(composer))
+        // Delete Cascade should remove joining songs and playlists
+        .then(async _ => await composerService.RemoveComposer(composer)) 
+        .then(async _ => await composerService.ListSongsByComposer(composer))
+        .then(_ =>
+          expect(_.length).is.eq(
+            0,
+            "There should be no songs associated with this composer.  They must be removed."
+          )
+        )
+        .then(async _ => await composerService.ListPlayLists(composer))
+        .then(_ => { console.log('list playlists'); console.log(_); return _ } )
+        .then(_ =>
+          expect(_.length).is.eq(
+            0,
+            "There should be no playlists associated with this composer.  They must be removed."
+          )
+        )
+        .then(async _ => await amazonService.ListFiles(bucket, composer.id + "-"))
+        // .then(_ => { console.log('amazon files'); console.log(_); return _ } )
+        .then(_ =>
+          expect(_.length).is.eq(
+            0,
+            "There should be no AWS files associated with this composer.  They must be removed."
+          )
+        )
+        .then(_ => ((playlist = null), (composer = null), (user = null)))
         .then(_ => done())
         .catch(_ => done(_));
     });

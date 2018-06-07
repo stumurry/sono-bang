@@ -5,7 +5,7 @@ describe("AWS", function() {
     it("should list bucket contents", function(done) {
       // testDeleteBucketContents()
       // testGetFiles()
-       testListFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
+       testListAllFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
       // testUploadFile()
       // listLocalFilesFromDirectory()
       // testCORS('sonobang-test')
@@ -21,7 +21,7 @@ async function testCORS() {
   return cors;
 }
 
-async function testListFiles() {
+async function testListAllFiles() {
   return await aws.ListAllFiles('sonobang-test');
 }
 
@@ -77,9 +77,11 @@ async function testGetFiles() {
 }
 
 async function testDeleteBucketContents() {
-  var files = await aws.ListFiles();
-
-  files["Contents"].forEach(async f => {
+  console.log('deleting bucket contents');
+  var files =  await testListAllFiles();
+  files.Contents.forEach(async f => {
     await aws.DeleteFile('sonobang-test', f.Key);
   });
+
+  return files;
 }
