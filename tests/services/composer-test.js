@@ -7,7 +7,7 @@ var {
   amazonService,
   uuid,
   composerUtil,
-  keys
+  keys,
 } = require("../common");
 
 describe("/composer", function() {
@@ -29,8 +29,9 @@ describe("/composer", function() {
     var song = null;
     // var S3Object = { Bucket: "sonobang-test", Key: f.Key };
     var S3Object = null;
-    var bucket = "sonobang-test";
+    
     var fName = "./tests/data/Haydn_Cello_Concerto_D-1.mp3";
+    var bucket = keys.aws.BUCKET;
 
     var testplaylist = {
       name: "Stu's custom playlist# 1",

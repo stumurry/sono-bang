@@ -101,10 +101,8 @@ module.exports = {
   },
   RemoveComposer: async function(composer) {
     var songs = await db.songs.findAll({where : { composer_id : composer.id }});
-    console.log(songs);
     for (var i in songs) {
       var s = songs[i];
-      console.log(s);
       try {
         await amazonService.DeleteFile(s.bucket, s.key);
       } catch(ex) {

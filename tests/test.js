@@ -13,11 +13,11 @@ describe("top", function () {
     // importTest("a", './aws/aws-s3-access.test.js');
 
     // routes
-    // importTest("b", './routes/composer-routes-test.js');
+    importTest("b", './routes/composer-routes-test.js');
     // importTest("c", './routes/me-routes-test.js');
 
     // services
-    importTest("d", './services/composer-test.js');
+    // importTest("d", './services/composer-test.js');
     // importTest("e", './services/me-test.js');
     // importTest("f", './services/producer-test.js');
 

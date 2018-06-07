@@ -27,5 +27,5 @@ exports.encryption = {
 }
 
 exports.aws = {
-  BUCKET : "sonobang-test"
+  BUCKET : process.env.AWS_BUCKET
 }
