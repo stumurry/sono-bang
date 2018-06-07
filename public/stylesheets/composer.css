@@ -277,3 +277,6 @@ a:hover {
 strong {
     color: #714256;
 }
+.center {
+    text-align: center;
+}

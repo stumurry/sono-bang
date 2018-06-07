@@ -213,4 +213,33 @@ router.post("/pricing", async (req, res, next) => {
   }
 });
 
+router.post("/send-playlist", async (req, res, next) => {
+  try {
+    var key = req.body.key;
+    k = composerUtil.decrypt(key);
+    try {
+
+      var playlistId = req.body.playlistId;
+
+      await composerService.SendPlaylist(playlistId);
+
+    } catch (ex) {
+      console.log("Error sending email.");
+      console.log(ex);
+      return res.render("composer-pricing", {
+        key: key,
+        error:
+          "Unable to update payment information.  Please contact Sonobang for more details."
+      });
+    }
+
+    return res.redirect('/composer/' + key);
+
+  } catch (ex) {
+    console.log(ex);
+    console.log("redirecting to login");
+    return res.redirect("/me/login");
+  }
+});
+
 module.exports = router;

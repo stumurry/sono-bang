@@ -12,6 +12,8 @@ var keys = require("../keys")
 // MusicMetaData doesn't know how to handle streams made by express-fileuploader
 var ns = require("streamifier");
 
+var emailer = require('../utils/Emailer')
+
 const Op = db.Sequelize.Op;
 
 module.exports = {
@@ -165,14 +167,27 @@ module.exports = {
     var dataUsage = await amazonService.GetDataUsage(bucket, composer.id + '-');
     var songs = await db.songs.findAll({ where: { composer_id: composer.id } });
 
+    var usage = dataUsage == 0 ? 0 : dataUsage / 1000000000;
+
     console.log(songs);
 
     return {
       songCount : songs.length,
-      dataUsage : dataUsage,
+      dataUsage : usage,
       name : user.name,
       email : user.email,
     }
+  },
+
+  SendPlaylist : async (playlistId) => {
+    console.log('Sending Playlist');
+    console.log(__dirname);
+    var l = await db.playlistsongs.findAll({ where: { playlist_id: playlistId } });
+    var songIds = l.map(pls => pls.song_id);
+    var songsInPlaylist = await db.songs.findAll({ where: { id: { [Op.in] : songIds } } });
+
+    
+    emailer.sendEmail(__dirname + '/../utils/temp.html', songsInPlaylist);
   },
 
 };

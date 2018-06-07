@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "root",
-    "password": "",
-    "database": "sonobang",
-    "host": "127.0.0.1",
+    "username": "b9e186b932375b",
+    "password": "003b98d6f357b51",
+    "database": "heroku_66959dbcb701ecf",
+    "host": "us-cdbr-iron-east-04.cleardb.net",
     "dialect": "mysql"
   },
   "test": {
-    "database": "sonobang",
-    "username": "root",
-    "password": "",
-    "host": "127.0.0.1",
+    "database": "heroku_66959dbcb701ecf",
+    "username": "b9e186b932375b",
+    "password": "003b98d6f357b51",
+    "host": "us-cdbr-iron-east-04.cleardb.net",
     "dialect": "mysql"
   },
   "production": {

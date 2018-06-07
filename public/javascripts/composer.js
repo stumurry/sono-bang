@@ -105,5 +105,15 @@ $(document).ready(() => {
 
     });
 
+    $('.send-playlist').on('click', (evt) => {
+        
+        var playlistTitle = $(evt.target).attr('playlist-title');
+        var playlistId = $(evt.target).attr('playlist-id');
+
+        $('#playlist-title').html(playlistTitle);
+        $('#playlist-id').val(playlistId);
+
+    });
+
     //alert('Loaded Correctly')
 });

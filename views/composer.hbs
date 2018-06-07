@@ -99,14 +99,15 @@
                             <a class="uk-accordion-title" href="#">{{name}}</a>
                             <div class="uk-accordion-content">
                                 {{#each songs}}
-                                    <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p>
+                                <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p>
                                 {{/each}}
 
                             </div>
                         </td>
                         <td>{{genre}}</td>
                         <td uk-margin>
-                            <button class="uk-button uk-button-default uk-button-small" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            <button playlist-id="{{id}}" playlist-title="{{name}}" class="uk-button uk-button-default uk-button-small send-playlist"
+                                type="button" uk-toggle='target:#send-playlist'>Send</button>
                             <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
                             <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
                         </td>
@@ -146,8 +147,31 @@
 <div id='send-playlist' uk-modal>
     <div class='uk-modal-dialog uk-modal-body'>
 
-        <h2>Copy this hyperlink</h2>
-        <p>http://www.sonobang.com/person/playlist</p>
+        <form action="/composer/send-playlist/" method="post" class="uk-form-stacked">
+            <input id="playlist-id" type="hidden" name="playlistId">
+            <input type="hidden" name="key" value="{{key}}">
+
+            <h2>Send Playlist</h2>
+
+            <h1 class="center" id="playlist-title"></h1>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Email</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" type="text" name="email">
+                </div>
+            </div>
+
+            
+
+            {{!-- <h2>Copy this hyperlink</h2>
+            <p>http://www.sonobang.com/person/playlist</p> --}}
+
+            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Send Email</button>
+
+        </form>
+
+
 
     </div>
 </div>
@@ -177,5 +201,5 @@
 </div>
 
 <script>
-    key='{{key}}';
+    key = '{{key}}';
 </script>
