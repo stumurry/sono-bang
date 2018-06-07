@@ -153,5 +153,11 @@ module.exports = {
   },
   ListPlaylistReferencesByPlaylist: async (playlist) => {
     return await db.playlistsongs.findAll({ where : { 'playlist_id' : playlist.id }});
-  }
+  },
+  GetProfile : async (composer, user) => {
+    return {
+      name : user.name,
+      email : user.email,
+    }
+  },
 };

@@ -11,6 +11,7 @@ router.get("/login", (req, res, next) => {
   res.render("login", {});
 });
 
+// Place login using `me` role so a producer can login maybe in the future.
 router.post(
   "/login",
   [
@@ -124,5 +125,24 @@ router.post(
 
   }
 );
+
+router.get('/profile/:key', async (req, res, next) => {
+  try {
+    var key = req.params.key;
+    k = composerUtil.decrypt(key);
+ 
+
+    var profile = await composerService.GetProfile(k.composer, k.user);
+
+    return res.render("profile", {
+      key: key,
+      profile: profile,
+    });
+  } catch (ex) {
+    console.log("Oops, authentication failed.");
+    console.log(ex);
+    return res.redirect("/me/login");
+  }
+});
 
 module.exports = router;

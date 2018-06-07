@@ -1,0 +1,130 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/composer.css">
+
+<div class="uk-container">
+    <div class="uk-position-top">
+        <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li>
+                        <a href="#">My Account</a>
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li >
+                                    <a href="/composer/{{key}}">Library</a>
+                                </li>
+                                <li class="uk-active">
+                                    <a href="/me/profile/{{key}}">Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    <header>
+        <h2>Sono-Bang</h2>
+    </header>
+
+    <div>
+
+
+        <div class="uk-card uk-card-default uk-width-1-2@m profile">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle">
+                    <div class="uk-width-auto profilePic">
+                        <img class="uk-border-circle" id="profilePic" width="150" height="150" src="https://images.esellerpro.com/2579/I/262/12/lrgscaleEE1513STK.jpg"
+                            alt="profile pic">
+
+                    </div>
+                    <div class="uk-child-width-1-2@s uk-grid-match memberName">
+                        <h3 class="uk-card-title uk-margin-remove-bottom" id="memberName">
+                            <span uk-icon="pencil" class="edit-icon" uk-toggle='target:#updateName'></span>{{profile.name}}</h3>
+
+                        <p class="uk-text-meta uk-margin-remove-top">
+                            <time datetime="2016-04-01T19:00">Member since May 1, 2018</time>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-card-body">
+                <p>
+                    <strong>Package:</strong>
+                    <span id="package">Pro -- (50GB)</span>
+                </p>
+                <p>
+                    <strong>Data Use:</strong>
+                    <span id="data">25</span>GB
+                </p>
+                <p>
+                    <strong>Total Songs in Library:</strong>
+                    <span id="songTotal">50</span>
+                </p>
+            </div>
+
+            <div class="uk-card-footer">
+                <p>
+                    <span uk-icon="pencil" class="edit-icon" uk-toggle='target:#updateEmail'></span>
+                    <strong>Email:</strong>
+                    <span id="profileEmail">{{profile.email}}</span>
+                </p>
+                <p>
+                    <span uk-icon="pencil" class="edit-icon" uk-toggle='target:#updatePhone'></span>
+                    <strong>Phone:</strong>
+                    <span id="profilePhone">801-555-5555</span>
+                </p>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id='updateName' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+        <form class="uk-form-stacked">
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Name</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" id="form-stacked-text" type="text">
+                </div>
+            </div>
+            <button class="uk-button" type="button">Submit</button>
+        </form>
+    </div>
+</div>
+<div id='updateEmail' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+        <form class="uk-form-stacked">
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Email</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" id="form-stacked-text" type="text">
+                </div>
+            </div>
+            <button class="uk-button" type="button">Submit</button>
+        </form>
+    </div>
+</div>
+<div id='updatePhone' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+        <form class="uk-form-stacked">
+            <div class="uk-margin">
+                <label class="uk-form-label" for="form-stacked-text">Phone</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" id="form-stacked-text" type="text">
+                </div>
+            </div>
+            <button class="uk-button" type="button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    key='{{key}}';
+</script>
