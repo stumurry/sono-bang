@@ -14,8 +14,8 @@ router.get("/login", (req, res, next) => {
 router.post(
   "/login",
   [
-    check("username").isLength({ min: 3 }),
-    check("password", "please enter a password").isLength({ min: 3 })
+    check("username", "please enter a username or username length must be at least 3 characters").isLength({ min: 3 }),
+    check("password", "please enter a password or password length must be at least 3 characters").isLength({ min: 3 })
   ],
   (req, res, next) => {
     console.log("start validating...");
@@ -35,12 +35,18 @@ router.post(
 
     return composerService
       .GetComposer(req.body.username, req.body.password)
+      .then(_ => { 
+        if (!_.user) {
+          res.status(422).render("login", { errors : { 'server' : { msg : 'username/login failed.  Please try again.'}} })
+        }
+        return _;
+      } )
       .then(_ => { return composerUtil.encrypt(_)} )
       .then(_ => res.redirect("/composer/" + _) )
       .catch(_ => {
         console.log(_);
         errors = { "server" : _ }
-        return res
+        res
           .status(400)
           .render("login", { errors: errors.mapped(), body: req.body });
       }); // Server Error
