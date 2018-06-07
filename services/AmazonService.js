@@ -62,5 +62,14 @@ module.exports = {
 
   GetCORS: async function(bucket) {
     return await s3.getBucketCors({ Bucket: bucket }).promise();
+  },
+
+  GetDataUsage : async (bucket, prefix) => {
+    var params = { Bucket: bucket, Prefix: prefix };
+    console.log(params);
+    var resp = await s3.listObjectsV2(params).promise();
+
+    return resp.Contents.map(d => parseFloat(d.Size)).reduce((acc, curr) => acc + curr);
+
   }
 };

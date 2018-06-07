@@ -6,6 +6,7 @@ var composerUtil = require("../utils/ComposerUtil");
 
 var mm = require("musicmetadata");
 var NodeID3 = require("node-id3")
+var keys = require("../keys")
 
 // needed for pipe() or Readable Streams.
 // MusicMetaData doesn't know how to handle streams made by express-fileuploader
@@ -155,9 +156,23 @@ module.exports = {
     return await db.playlistsongs.findAll({ where : { 'playlist_id' : playlist.id }});
   },
   GetProfile : async (composer, user) => {
+
+    var bucket = keys.aws.BUCKET;
+
+    console.log('bucket');
+    console.log(bucket);
+
+    var dataUsage = await amazonService.GetDataUsage(bucket, composer.id + '-');
+    var songs = await db.songs.findAll({ where: { composer_id: composer.id } });
+
+    console.log(songs);
+
     return {
+      songCount : songs.length,
+      dataUsage : dataUsage,
       name : user.name,
       email : user.email,
     }
   },
+
 };

@@ -130,7 +130,6 @@ router.get('/profile/:key', async (req, res, next) => {
   try {
     var key = req.params.key;
     k = composerUtil.decrypt(key);
- 
 
     var profile = await composerService.GetProfile(k.composer, k.user);
 

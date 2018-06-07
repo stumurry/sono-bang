@@ -10,10 +10,10 @@ describe("top", function () {
     beforeEach(function () {
        console.log("running something before each test");
     });
-    // importTest("a", './aws/aws-s3-access.test.js');
+     importTest("a", './aws/aws-s3-access.test.js');
 
     // routes
-    importTest("b", './routes/composer-routes-test.js');
+    // importTest("b", './routes/composer-routes-test.js');
     // importTest("c", './routes/me-routes-test.js');
 
     // services
