@@ -5,15 +5,15 @@ var fs = require("fs");
 var transporter = nodemailer.createTransport({
     host: 'mail.stumurry.com',
     port: 25,
-    // secure: false, // upgrade later with STARTTLS
+    secure: false, // upgrade later with STARTTLS
     auth: {
         user: 'stu@stumurry.com',
         pass: 'stuart!2345'
     },            
-    authMethod:'NTLM',
-    secure:false,
-    tls: {rejectUnauthorized: false},
-    debug:true
+            authMethod:'NTLM',
+            secure:false,
+            tls: {rejectUnauthorized: false},
+            debug:true
 });
 
 var emailer = {
