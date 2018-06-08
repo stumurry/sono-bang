@@ -1,7 +1,8 @@
 var AWS = require("aws-sdk");
 const db = require("../db/models");
 var uuid = require("node-uuid");
-var s3 = new AWS.S3();
+var keys = require("../keys")
+var s3 = new AWS.S3({ accessKeyId : keys.aws.ACCESS_KEY, secretAccessKey : keys.aws.SECRET_ACCESS_KEY });
 var fs = require("fs");
 const path = require("path");
 

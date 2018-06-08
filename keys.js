@@ -28,5 +28,7 @@ exports.encryption = {
 
 // Bucket is case sensistive
 exports.aws = {
-  BUCKET : process.env.AWS_BUCKET
+  BUCKET : process.env.AWS_BUCKET,
+  ACCESS_KEY : process.env.access_token_key,
+  SECRET_ACCESS_KEY : process.env.access_token_secret,
 }

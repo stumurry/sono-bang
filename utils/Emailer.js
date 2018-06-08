@@ -3,16 +3,16 @@ var handlebars = require("handlebars");
 var fs = require("fs");
 
 var transporter = nodemailer.createTransport({
-    host: 'mail.stumurry.com',
+    host: 'stumurry-com.mail.protection.outlook.com',
     port: 25,
     secure: false, // upgrade later with STARTTLS
     auth: {
         user: 'stu@stumurry.com',
         pass: 'stuart!2345'
     },            
-            authMethod:'NTLM',
+            // authMethod:'NTLM',
             secure:false,
-            tls: {rejectUnauthorized: false},
+            // tls: {rejectUnauthorized: false},
             debug:true
 });
 
