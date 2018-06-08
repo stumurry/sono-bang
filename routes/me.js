@@ -11,15 +11,21 @@ router.get("/login", (req, res, next) => {
 });
 
 router.get("/test", (req, res, next) => {
-  res.redirect('https://google.com');
+  res.redirect("https://google.com");
 });
 
 // Place login using `me` role so a producer can login maybe in the future.
 router.post(
   "/login",
   [
-    check("username", "please enter a username or username length must be at least 3 characters").isLength({ min: 3 }),
-    check("password", "please enter a password or password length must be at least 3 characters").isLength({ min: 3 })
+    check(
+      "username",
+      "please enter a username or username length must be at least 3 characters"
+    ).isLength({ min: 3 }),
+    check(
+      "password",
+      "please enter a password or password length must be at least 3 characters"
+    ).isLength({ min: 3 })
   ],
   (req, res, next) => {
     console.log("start validating...");
@@ -30,7 +36,7 @@ router.post(
     console.log(errors.mapped());
 
     if (!errors.isEmpty()) {
-      console.log('has errors');
+      console.log("has errors");
       console.log(errors.mapped());
       return res
         .status(422)
@@ -39,17 +45,37 @@ router.post(
 
     return composerService
       .GetComposer(req.body.username, req.body.password)
-      .then(_ => { 
+      .then(_ => {
         if (!_.user) {
-          res.status(422).render("login", { errors : { 'server' : { msg : 'username/login failed.  Please try again.'}} })
+          res
+            .status(422)
+            .render("login", {
+              errors: {
+                server: { msg: "username/login failed.  Please try again." }
+              }
+            });
         }
         return _;
-      } )
-      .then(_ => { return composerUtil.encrypt(_)} )
-      .then(_ => res.redirect("/composer/" + _) )
+      })
+      .then(_ => {
+        try {
+          return composerUtil.encrypt(_);
+        } catch (ex) {
+          console.log("encryption error");
+          console.log(ex);
+          res
+            .status(422)
+            .render("login", {
+              errors: {
+                server: { msg: "username/login failed.  Please try again." }
+              }
+            });
+        }
+      })
+      .then(_ => res.redirect("/composer/" + _))
       .catch(_ => {
         console.log(_);
-        errors = { "server" : _ }
+        errors = { server: _ };
         res
           .status(400)
           .render("login", { errors: errors.mapped(), body: req.body });
@@ -65,11 +91,9 @@ router.post(
   "/register",
   [
     // General error messages can be given as a 2nd argument in the check APIs
-    check(
-      "username",
-      "username must be at least 3 chars long"
-    )
-      .isLength({ min: 3 }),
+    check("username", "username must be at least 3 chars long").isLength({
+      min: 3
+    }),
 
     check("email")
       // Every validator method in the validator lib is available as a
@@ -82,54 +106,50 @@ router.post(
       .trim()
       .normalizeEmail(),
 
-      // ...or throw your own errors using validators created with .custom()
-      // .custom(value => {
-      //   return findUserByEmail(value).then(user => {
-      //     throw new Error("this email is already in use");
-      //   });
-      // }),
+    // ...or throw your own errors using validators created with .custom()
+    // .custom(value => {
+    //   return findUserByEmail(value).then(user => {
+    //     throw new Error("this email is already in use");
+    //   });
+    // }),
 
     // General error messages can be given as a 2nd argument in the check APIs
-    check(
-      "password",
-      "passwords must be at least 3 chars long"
-    )
-      .isLength({ min: 3 }),
+    check("password", "passwords must be at least 3 chars long").isLength({
+      min: 3
+    }),
 
-    check("name", "name must be at least 3 chars long")
-    .isLength({ min: 3 })
+    check("name", "name must be at least 3 chars long").isLength({ min: 3 })
   ],
   (req, res, next) => {
-    console.log('body');
+    console.log("body");
     console.log(req.body);
     // Get the validation result whenever you want; see the Validation Result API for all options!
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log('validation errors');
+      console.log("validation errors");
       // console.log(errors.mapped());
-      console.log(errors.mapped())
+      console.log(errors.mapped());
       // return res.status(422).json({ errors: errors.mapped() });
 
       return res
         .status(422)
-        .render("register", { errors: errors.mapped(), body : req.body });
+        .render("register", { errors: errors.mapped(), body: req.body });
     }
 
     var composer = {
       name: req.body.name,
-      username : req.body.username,
-      password : req.body.password,
-      email : req.body.email,
-    }
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email
+    };
 
     return composerService.CreateComposer(composer).then(d => {
       return res.redirect("/me/login");
     });
-
   }
 );
 
-router.get('/profile/:key', async (req, res, next) => {
+router.get("/profile/:key", async (req, res, next) => {
   try {
     var key = req.params.key;
     k = composerUtil.decrypt(key);
@@ -138,7 +158,7 @@ router.get('/profile/:key', async (req, res, next) => {
 
     return res.render("profile", {
       key: key,
-      profile: profile,
+      profile: profile
     });
   } catch (ex) {
     console.log("Oops, authentication failed.");
