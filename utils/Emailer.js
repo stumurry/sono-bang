@@ -3,13 +3,17 @@ var handlebars = require("handlebars");
 var fs = require("fs");
 
 var transporter = nodemailer.createTransport({
-    host: 'smtp.office365.com',
-    port: 587,
-    secure: false, // upgrade later with STARTTLS
+    host: 'mail.stumurry.com',
+    port: 25,
+    // secure: false, // upgrade later with STARTTLS
     auth: {
         user: 'stu@stumurry.com',
         pass: 'stuart!2345'
-    }
+    },            
+    authMethod:'NTLM',
+    secure:false,
+    tls: {rejectUnauthorized: false},
+    debug:true
 });
 
 var emailer = {

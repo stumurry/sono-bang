@@ -58,8 +58,19 @@ router.post(
           });
         } else {
           console.log('Encrypting token...');
-          console.log(c);
-          var token = composerUtil.encrypt(c);
+
+          // console.log(c);
+          console.log(c.composer.dataValues);
+          console.log(c.user.dataValues);
+
+          var formattedComposer = {
+            composer : c.composer.dataValues,
+            user : c.user.dataValues,
+          }
+
+          console.log(formattedComposer);
+
+          var token = composerUtil.encrypt(formattedComposer);
 
           res.redirect("/composer/" + token);
         }
