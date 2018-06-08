@@ -6,9 +6,12 @@ const { matchedData, sanitize } = require("express-validator/filter");
 const composerService = require("../services/ComposerService");
 const composerUtil = require("../utils/ComposerUtil");
 
-
 router.get("/login", (req, res, next) => {
   res.render("login", {});
+});
+
+router.get("/test", (req, res, next) => {
+  res.redirect('https://google.com');
 });
 
 // Place login using `me` role so a producer can login maybe in the future.
