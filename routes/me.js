@@ -27,59 +27,53 @@ router.post(
       "please enter a password or password length must be at least 3 characters"
     ).isLength({ min: 3 })
   ],
-  (req, res, next) => {
-    console.log("start validating...");
-    console.log(req.body);
+  async (req, res, next) => {
+    try {
+      console.log("start validating...");
+      console.log(req.body);
 
-    const errors = validationResult(req);
+      const errors = validationResult(req);
 
-    console.log(errors.mapped());
-
-    if (!errors.isEmpty()) {
-      console.log("has errors");
       console.log(errors.mapped());
-      return res
-        .status(422)
-        .render("login", { errors: errors.mapped(), body: req.body });
-    }
 
-    return composerService
-      .GetComposer(req.body.username, req.body.password)
-      .then(_ => {
-        if (!_.user) {
-          res
-            .status(422)
-            .render("login", {
-              errors: {
-                server: { msg: "username/login failed.  Please try again." }
-              }
-            });
-        }
-        return _;
-      })
-      .then(_ => {
-        try {
-          return composerUtil.encrypt(_);
-        } catch (ex) {
-          console.log("encryption error");
-          console.log(ex);
-          res
-            .status(422)
-            .render("login", {
-              errors: {
-                server: { msg: "username/login failed.  Please try again." }
-              }
-            });
-        }
-      })
-      .then(_ => res.redirect("/composer/" + _))
-      .catch(_ => {
-        console.log(_);
-        errors = { server: _ };
-        res
-          .status(400)
+      if (!errors.isEmpty()) {
+        console.log("has errors");
+        console.log(errors.mapped());
+        return res
+          .status(422)
           .render("login", { errors: errors.mapped(), body: req.body });
-      }); // Server Error
+      } else {
+        console.log("Getting Composer");
+        var c = await composerService.GetComposer(
+          req.body.username,
+          req.body.password
+        );
+
+        if (!c.user) {
+          console.log("username/login failed");
+          res.status(422).render("login", {
+            errors: {
+              server: { msg: "username/login failed.  Please try again." }
+            }
+          });
+        } else {
+          console.log('Encrypting token...');
+          var token = composerUtil.encrypt(c);
+
+          res.redirect("/composer/" + token);
+        }
+      }
+    } catch (ex) {
+      console.log("server error");
+      console.log(ex);
+      res.status(422).render("login", {
+        errors: {
+          server: {
+            msg: "Server Error.  Please try again later or contact support."
+          }
+        }
+      });
+    }
   }
 );
 
