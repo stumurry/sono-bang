@@ -52,15 +52,11 @@ module.exports = {
       where: { username: username, password: password }
     });
 
-    console.log(user);
-
     var composer = null;
     if (user) {
       composer = await db.composers.findOne({ where: { user_id: user.id } });
     }
-
-    console.log(composer);
-
+    
     return {
       composer: composer,
       user: user

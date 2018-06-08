@@ -11,7 +11,10 @@ var crypto = require("crypto"),
 var ComposerUtil = {
   encrypt: function(text) {
     var message = JSON.stringify(text);
+    console.log('stringify message')
+    console.log(message)
     var cipher = crypto.createCipher(algorithm, password);
+    console.log('created cipher')
     var crypted = cipher.update(message, "utf8", "hex");
     crypted += cipher.final("hex");
     return crypted;
