@@ -150,30 +150,24 @@ describe("/composer", function() {
       // S3 buckets offers only a `prefix` attribute for seaching.
       // S3 limits the number of buckets you can create and uses a Global Namespace.
       // We need a way to tie this file to a database entry.
-      AddSong(composer)
+
+      console.log('Adding song to composer');
+      composerService.AddSongToComposer(composer, fName)
+        // .then(_ => { console.log(_); return _})
         .then(s => (song = s)) // if s is not returned, it will not be available for other `then()` chains
-        .then(async _ => testDBProperties(song, await GetSongInfo()))
+        .then(async _ => testDBProperties(song.dataValues, await composerUtil.GetSongInformation(fName, composer)))
         // .then(_ => testKeyNomenclature(testsong, salt))
-        // .then(_ => console.log(song))
+       
         .then(_ => amazonService.DeleteFile("sonobang-test", song.key)) // Done uploading, now delete it.
         .then(_ => done())
         .catch(_ => done(_)); // Signal Mocha that this unit of work is complete and pass exception so it can fail the test.
     });
 
-    async function GetSongInfo() {
-      
-      // var fName = "./tests/data/airborne.mp3";
-
-      return await composerUtil.GetSongInformation(fName, composer);
-    }
-
-    async function AddSong(composer) {
-      var testsong = await GetSongInfo();
-      return await composerService.AddSongToComposer(testsong, fName);
-    }
-
     function testDBProperties(song, testsong) {
+
+
       // console.log(song)
+      // console.log(testsong)
       // To Do: Use sprintf or string.format() implementation late when time permits like found in C#
       var errorMsg =
         " property not found. Use Sequelize CLI to create a new migration and insert this field.";
@@ -269,7 +263,7 @@ describe("/composer", function() {
     it("should be able to remove composer", function(done) {
       composerService.CreatePlayList(composer, testplaylist)
         .then(_ => (playlist = _))
-        .then(async _ => await AddSong(composer))
+        .then(async _ => await composerService.AddSongToComposer(composer, fName))
         .then(_ => (song = _))
         .then(async _ => await composerService.ListSongsByComposer(composer))
         // Delete Cascade should remove joining songs and playlists

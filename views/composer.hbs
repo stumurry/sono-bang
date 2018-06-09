@@ -66,7 +66,8 @@
                             <td>
                                 <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-song-to-playlist" uk-toggle='target:#add-song-to-playlist'
                                     type="button">Add to Playlist</button>
-                                <button song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" type="button">X</button>
+                                <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" uk-toggle='target:#delete-song'
+                                    type="button">X</button>
                             </td>
                         </tr>
                         {{/each}}
@@ -100,16 +101,18 @@
                             <div class="uk-accordion-content">
                                 {{#each songs}}
                                 <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p>
+                                <button song-id="{{id}}" playlist-id="{{playlistId}}" class="uk-button uk-button-default uk-button-small remove-song-from-playlist" type="button">x</button>
                                 {{/each}}
-
                             </div>
                         </td>
                         <td>{{genre}}</td>
                         <td uk-margin>
-                            <button playlist-id="{{id}}" playlist-title="{{name}}" class="uk-button uk-button-default uk-button-small send-playlist"
-                                type="button" uk-toggle='target:#send-playlist'>Send</button>
-                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button>
-                            <button class="uk-button uk-button-default uk-button-small delete" type="button">X</button>
+                            <button class="uk-button uk-button-default uk-button-small send-playlist" public-key="{{publickey}}" playlist-id="{{id}}"
+                                playlist-title="{{name}}" type="button" uk-toggle='target:#send-playlist'>Send</button>
+                            {{!--
+                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button> --}}
+                            <button class="uk-button uk-button-default uk-button-small delete-playlist" playlist-id="{{id}}" playlist-title="{{name}}"
+                                uk-toggle='target:#delete-playlist' type="button">X</button>
                         </td>
                     </tr>
                     {{/each}}
@@ -140,7 +143,6 @@
             </div>
             <button class="uk-button uk-button-primary" type="submit">Create Playlist</button>
         </form>
-
     </div>
 </div>
 
@@ -155,24 +157,21 @@
 
             <h1 class="center" id="playlist-title"></h1>
 
+            {{!--
             <div class="uk-margin">
                 <label class="uk-form-label" for="form-stacked-text">Email</label>
                 <div class="uk-form-controls">
                     <input class="uk-input" type="text" name="email">
                 </div>
-            </div>
+            </div> --}}
 
-            
 
-            {{!-- <h2>Copy this hyperlink</h2>
-            <p>http://www.sonobang.com/person/playlist</p> --}}
+            <h2>Copy this hyperlink</h2>
+            <p id="public-key"></p>
 
-            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Send Email</button>
-
+            {{!--
+            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Send Email</button> --}}
         </form>
-
-
-
     </div>
 </div>
 
@@ -197,6 +196,30 @@
             <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Save</button>
         </form>
 
+    </div>
+</div>
+
+<div id='delete-playlist' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <h2>Delete Playlist?</h2>
+
+        <h1 class="center" id="delete-playlist-title"></h1>
+
+        <!-- DELETE and PUT are not supported by HTML5 Forms.  Use a simple link instead.-->
+        <a class="uk-button uk-button-primary confirm-delete-playlist" type="button" href="javascript:void(0)">Delete Playlist</a>
+    </div>
+</div>
+
+<div id='delete-song' uk-modal>
+    <div class='uk-modal-dialog uk-modal-body'>
+
+        <h2>Delete Song?</h2>
+
+        <h1 class="center" id="delete-song-title"></h1>
+
+        <!-- DELETE and PUT are not supported by HTML5 Forms.  Use a simple link instead.-->
+        <a class="uk-button uk-button-primary confirm-delete-song" type="button" href="javascript:void(0)">Delete Song</a>
     </div>
 </div>
 

@@ -31,13 +31,22 @@ router.get("/:key", async (req, res, next) => {
     for (var ppp in playlists) {
       var inplaylist = playlists[ppp].dataValues;
 
+      // allow anyone with this key to see the playlist
+      inplaylist.publickey = composerUtil.encrypt({ playlist: inplaylist, user : k.user });
+
       var songs = await composerService.ListSongsInPlayList(inplaylist);
       console.log('length');
       console.log(songs.length);
       
-      var asdf = songs.map(d => d.dataValues)
+      var playlistSongs = songs.map(d => {
+        var a = d.dataValues;
+        a.playlistId = inplaylist.id;
 
-      inplaylist.songs = asdf;
+        return a;
+        
+      })
+
+      inplaylist.songs = playlistSongs;
       playlistwithsongs.push(inplaylist);
     }
    
@@ -142,16 +151,17 @@ router.post("/song", async (req, res, next) => {
 async function ProcessFileUploadForm(fields, ffff) {
   var _ = composerUtil.decrypt(fields.key);
 
-  var song = await composerUtil.GetSongInformation(ffff.path, _.composer);
+  //var song = await composerUtil.GetSongInformation(ffff.path, _.composer);
 
-  await composerService.AddSongToComposer(song, ffff.path);
+  await composerService.AddSongToComposer(_.composer, ffff.path);
 }
 
 router.delete("/song/:id", async (req, res, next) => {
   console.log("deleting song...");
   try {
     var id = req.params.id;
-    var _ = composerUtil.decrypt(req.query.key);
+    var key = req.headers.authorization;
+    var _ = composerUtil.decrypt(key);
 
     res.setHeader("Content-Type", "application/json");
 
@@ -160,10 +170,11 @@ router.delete("/song/:id", async (req, res, next) => {
       res
         .status(200)
         .send(
-          JSON.stringify({ message: "Successfully uploaded file." }, null, 3)
+          JSON.stringify({ message: "Successfully removed file." }, null, 3)
         );
       // return res.redirect("/composer/" + id);
     } catch (ex) {
+      console.log(ex);
       res
         .status(400)
         .send(JSON.stringify({ error: "Unable to remove song." }, null, 3));
@@ -175,6 +186,73 @@ router.delete("/song/:id", async (req, res, next) => {
     return res.status(401).send({ error: "Unauthenticated" });
   }
 });
+
+router.delete("/playlist/:id", async (req, res, next) => {
+  console.log("deleting playlist...");
+  try {
+    
+    var key = req.headers.authorization;
+    var _ = composerUtil.decrypt(key);
+
+    res.setHeader("Content-Type", "application/json");
+
+    try {
+      var id = parseInt(req.params.id);
+      await composerService.RemovePlaylist({ id: id });
+
+      res
+        .status(200)
+        .send(
+          JSON.stringify({ message: "Successfully removed playlist." }, null, 3)
+        );
+      // return res.redirect("/composer/" + id);
+    } catch (ex) {
+      console.log(ex);
+      res
+        .status(400)
+        .send(JSON.stringify({ error: "Unable to remove playlist." }, null, 3));
+      // return res.redirect("/composer/" + id + "?err=UNABLE_TO_DELETE_SONG");
+    }
+  } catch (ex) {
+    console.log("UnAuthenticated");
+    console.log(ex);
+    return res.status(401).send({ error: "Unauthenticated" });
+  }
+});
+
+router.delete("/playlist/:playlistId/song/:songId", async (req, res, next) => {
+  console.log("deleting playlist/ song...");
+  try {
+    
+    var key = req.headers.authorization;
+    var _ = composerUtil.decrypt(key);
+
+    res.setHeader("Content-Type", "application/json");
+
+    try {
+
+      await composerService.RemoveSongFromPlaylist({ id : req.params.songId }, { id : req.params.playlistId})
+      
+      res
+        .status(200)
+        .send(
+          JSON.stringify({ message: "Successfully removed playlist." }, null, 3)
+        );
+      // return res.redirect("/composer/" + id);
+    } catch (ex) {
+      console.log(ex);
+      res
+        .status(400)
+        .send(JSON.stringify({ error: "Unable to remove playlist." }, null, 3));
+      // return res.redirect("/composer/" + id + "?err=UNABLE_TO_DELETE_SONG");
+    }
+  } catch (ex) {
+    console.log("UnAuthenticated");
+    console.log(ex);
+    return res.status(401).send({ error: "Unauthenticated" });
+  }
+});
+
 
 // view pricing page
 router.get("/pricing/:id", async (req, res, next) => {

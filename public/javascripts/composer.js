@@ -1,38 +1,73 @@
 // Using Jquery until we go into Angular or React.
 $(document).ready(() => {
 
-    // ** key **
-    // gets rendered by handlebars making it globally available.
+    
+
+    $('.remove-song-from-playlist').on('click', (evt) => {
+
+        var songId = $(evt.target).attr('song-id');
+        var playlistId = $(evt.target).attr('playlist-id');
+
+        AjaxUtils.DeleteByID('/composer/playlist/' + playlistId + '/song/' + songId, key)
+
+    });
+
+    $('.add-song-to-playlist').on('click', (evt) => {
+
+        var songTitle = $(evt.target).attr('song-title');
+        var songId = $(evt.target).attr('song-id');
+
+        $('#song-title').html(songTitle);
+        $('#song-id').val(songId);
+
+    });
+
+    $('.send-playlist').on('click', (evt) => {
+        
+        var playlistTitle = $(evt.target).attr('playlist-title');
+        var playlistId = $(evt.target).attr('playlist-id');
+        var publicKey = $(evt.target).attr('public-key');
+
+        var url = '<a href="/producer/?key=' + publicKey +'">Click Here</a>'
+
+        $('#public-key').html(url);
+        $('#playlist-title').html(playlistTitle);
+        $('#playlist-id').val(playlistId);
+
+    });
+
+    var selectedPlaylistId= "";
+
+    $('.delete-playlist').on('click', (evt) => {
+        
+        var playlistTitle = $(evt.target).attr('playlist-title');
+        $('#delete-playlist-title').html(playlistTitle);
+
+        selectedPlaylistId = $(evt.target).attr('playlist-id');
+
+    });
+
+    $('.confirm-delete-playlist').on('click', (evt) => {
+        AjaxUtils.DeleteByID('/composer/playlist/' + selectedPlaylistId, key)
+    });
+
+
+    var selectedSongId = 0;
 
     $('.delete-song').on('click', (evt) => {
-        $.ajax({
-            url: '/composer/song/' + id + '?' + $.param({ "key": key }),
-            type: 'DELETE',
-            success: () => window.location = '/composer/' + key,
-            error: () => alert('Error Deleting Resource.'),
-            statusCode: {
-                401: function () {
-                    window.location = '/me/login';
-                },
-                400: function (o) {
-                    alert(o.error);
-                },
-                200: function (o) {
-                    window.location = '/composer/' + key;
-                }
-            }
-        });
-    });
 
-    $('.play-song').on('click', (evt) => {
-        var key = $(evt.target).attr('song-key');
-        alert(key);
+        var songTitle = $(evt.target).attr('song-title');
+
+        $('#delete-song-title').html(songTitle);
+
+        selectedSongId = $(evt.target).attr('song-id');
 
     });
 
-    $('.add-playlist').on('click', (evt) => {
-        var id = $(evt.target).attr('song-id');
-        $('')
+    $('.confirm-delete-song').on('click', (evt) => {
+        
+        AjaxUtils.DeleteByID('/composer/song/' + selectedSongId, key)
+       
     });
 
     var bar = document.getElementById('js-progressbar');
@@ -95,25 +130,7 @@ $(document).ready(() => {
     });
 
 
-    $('.add-song-to-playlist').on('click', (evt) => {
-
-        var songTitle = $(evt.target).attr('song-title');
-        var songId = $(evt.target).attr('song-id');
-
-        $('#song-title').html(songTitle);
-        $('#song-id').val(songId);
-
-    });
-
-    $('.send-playlist').on('click', (evt) => {
-        
-        var playlistTitle = $(evt.target).attr('playlist-title');
-        var playlistId = $(evt.target).attr('playlist-id');
-
-        $('#playlist-title').html(playlistTitle);
-        $('#playlist-id').val(playlistId);
-
-    });
+   
 
     //alert('Loaded Correctly')
 });

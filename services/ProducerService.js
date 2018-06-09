@@ -1,13 +1,26 @@
-const db = require('../db/models')
+const db = require('../db/models');
+const Op = db.Sequelize.Op;
 
-module.exports = function() {
-  var ProducerService = {
-    // Testing purposes only.
-    Disconnect: function() {
-      console.log("Closing connection...");
-      db.sequelize.close();
-    }
-  };
+var ProducerService = {
+  // Testing purposes only.
+  Disconnect: async () =>  {
+    console.log("Closing connection...");
+    return await db.sequelize.close();
+  },
+  
+  GetSongsByPlaylist : async (playlist) => {
 
-  return ProducerService;
+      // fix this query by optimizing it when we have more time.
+      var l = await db.playlistsongs.findAll({ where: { playlist_id: playlist.id } });
+      var songIds = l.map(pls => pls.song_id);
+      var songs = await db.songs.findAll({ where: { id: { [Op.in] : songIds } } });
+
+      return songs.map(_ => _.dataValues);
+
+  },
+  
+
+
 };
+
+module.exports = ProducerService;

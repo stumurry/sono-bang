@@ -18,9 +18,9 @@ const Op = db.Sequelize.Op;
 
 module.exports = {
   // Testing purposes only.
-  Disconnect: function() {
+  Disconnect: async function() {
     console.log("Closing connection...");
-    return db.sequelize.close();
+    return await db.sequelize.close();
   },
 
   // Complete Unit Tests Here:
@@ -76,10 +76,15 @@ module.exports = {
       await db.playlistsongs.create({ song_id : song.id, playlist_id : playlist.id });
   },
 
-  AddSongToComposer: async function(song, file) {
+  AddSongToComposer: async function(composer, file) {
     // As we are uploading data to S3, read the file info and duration.
 
-    console.log("uploading file");
+    var song = await composerUtil.GetSongInformation(file, composer);
+    console.log("************************");
+    console.log(composer)
+    console.log("uploading song");
+    console.log(song);
+    console.log('************************');
 
     // Take song uploaded by web form and send it AWS S3
     var resp = await amazonService.UploadFile(song, file);
@@ -121,6 +126,13 @@ module.exports = {
     await user.destroy();
   },
   RemovePlaylist: async function(playlist) {
+
+    console.log(playlist);
+
+    if (!playlist.destroy) {
+      playlist = await db.playlists.findById(playlist.id);
+    }
+
     return await playlist.destroy();
   },
   RemoveSong: async song => {
@@ -189,5 +201,9 @@ module.exports = {
     
     emailer.sendEmail(__dirname + '/../utils/temp.html', songsInPlaylist);
   },
+
+  GetPlaylistKey : (playlist) => {
+    return composerUtil.encrypt(playlist);
+  }
 
 };

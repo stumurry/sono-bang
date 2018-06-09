@@ -1,11 +1,11 @@
-const { fs, aws, path, uuid } = require("../common");
+const { fs, aws, path, uuid, keys } = require("../common");
 
 describe("AWS", function() {
   describe("#S3", function() {
     it("should list bucket contents", function(done) {
       // testDeleteBucketContents()
       // testGetFiles()
-       testListAllFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
+      testListAllFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
       // testUploadFile()
       // listLocalFilesFromDirectory()
       // testCORS('sonobang-test')
@@ -17,12 +17,12 @@ describe("AWS", function() {
 });
 
 async function testCORS() {
-  var cors = await aws.GetCORS('sonobang-test');
+  var cors = await aws.GetCORS(keys.aws.BUCKET);
   return cors;
 }
 
 async function testListAllFiles() {
-  return await aws.ListAllFiles('sonobang-test');
+  return await aws.ListAllFiles(keys.aws.BUCKET);
 }
 
 async function listLocalFilesFromDirectory() {
@@ -54,7 +54,7 @@ async function testUploadFile() {
     key : salt + "+" + fileName,
     name: "HAYDN \"CONCERTO D-MAJOR\"",
     fileName: fileName,
-    bucket: "sonobang-test", // bucket name
+    bucket: keys.aws.BUCKET, // bucket name
     description: "REINER HOCHMUTH CELLIST"
   };
 
@@ -80,7 +80,7 @@ async function testDeleteBucketContents() {
   console.log('deleting bucket contents');
   var files =  await testListAllFiles();
   files.Contents.forEach(async f => {
-    await aws.DeleteFile('sonobang-test', f.Key);
+    await aws.DeleteFile(keys.aws.BUCKET, f.Key);
   });
 
   return files;

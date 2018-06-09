@@ -1,0 +1,59 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/composer.css">
+
+<div class="uk-container">
+    <header>
+        <img src="/images/SONO1.png">
+    </header>
+
+    <div class="uk-card uk-card-default uk-width-1-2@m profile">
+        <div class="uk-card-header">
+            <div class="uk-flex-middle">
+
+                <div class="memberName">
+                    <h3 class="uk-card-title uk-margin-remove-bottom" id="memberName">{{name}}</h3>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <span id="profileEmail"></span>{{email}}</span>
+                    </p>
+                    <p>
+                        <strong>Phone:</strong>
+                        <span id="profilePhone">801-555-5555</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-card-body">
+            <table class="uk-table uk-table-justify uk-table-divider">
+                <tbody>
+                    <tr uk-accordion>
+                        {{#songs}}
+                        <td class="uk-open">
+                            <a class="uk-accordion-title uk-text-bold" id="playlistName" href="#">{{name}}</a>
+                            <div class="uk-accordion-content trackDivider">
+
+                                <p>
+                                    {{!--
+                                    <span uk-icon="play-circle" class="play-icon"></span>{{name}} --}}
+
+                                    <td uk-margin>
+                                        <audio controls>
+                                            <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
+                                        </audio>
+                                    </td>
+                                    <p>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {{/songs}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    key = '{{key}}';
+</script>

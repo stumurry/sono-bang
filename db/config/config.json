@@ -1,13 +1,13 @@
 {
   "development": {
-    "database": "127.0.0.1",
+    "database": "sonobang",
     "username": "root",
     "password": "",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
-    "database": "127.0.0.1",
+    "database": "sonobang",
     "username": "root",
     "password": "",
     "host": "localhost",
