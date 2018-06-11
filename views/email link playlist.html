@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sono-Bang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/css/uikit.min.css" />
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/js/uikit-icons.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="uk-container">
+        <header>
+            <img src="SONO1.png">
+        </header>
+
+        <div class="uk-card uk-card-default uk-width-1-2@m profile">
+            <div class="uk-card-header">
+                <div class="uk-flex-middle">
+
+                    <div class="memberName">
+                        <h3 class="uk-card-title uk-margin-remove-bottom" id="memberName">John Doe</h3>
+
+                        <p>
+                            <strong>Email:</strong>
+                            <span id="profileEmail"></span>person@gmail.com</span>
+                        </p>
+                        <p>
+                            <strong>Phone:</strong>
+                            <span id="profilePhone">801-555-5555</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-card-body">
+                <table class="uk-table uk-table-justify uk-table-divider">
+                    <tbody>
+                        <tr uk-accordion>
+                            <td class="uk-open">
+                                <a class="uk-accordion-title uk-text-bold" id="playlistName" href="#">Playlist 1</a>
+                                <div class="uk-accordion-content trackDivider">
+                                    <p>
+                                        <span uk-icon="play-circle" class="play-icon"></span>track 1</p>
+                                    <p>
+                                        <span uk-icon="play-circle" class="play-icon"></span>track 2</p>
+                                    <p>
+                                        <span uk-icon="play-circle" class="play-icon"></span>track 3</p>
+                                    <p>
+                                        <span uk-icon="play-circle" class="play-icon"></span>track 4</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- </div> -->
+</body>

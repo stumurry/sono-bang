@@ -1,233 +1,5 @@
-<style>
-    /***** GLOBAL STYLES *****/
+<link rel="stylesheet" type="text/css" href="/stylesheets/composer.css">
 
-    body {
-        padding-top: 54px;
-        background-image: url("../../images/bg_diamond.png");
-        height: 100%;
-    }
-
-    .logo {
-        color: #714256;
-        font-weight: bold;
-    }
-
-    nav a {
-        border-radius: 5px;
-    }
-
-    nav a:hover {
-        background: #79b6b8;
-        font-weight: bold;
-        color: #fff !important;
-        border-radius: 5px;
-    }
-
-    .uk-active a {
-        font-weight: bold;
-    }
-
-
-
-    /***** LIBRARY-PLAYLIST PAGE *****/
-
-    .addButton {
-        border: #714256 1px solid !important;
-        border-radius: 3px;
-        background: #714256 !important;
-        color: #fff;
-    }
-
-    .addButton:hover {
-        color: #fff;
-        background: #ef8321 !important;
-    }
-
-    th {
-        color: #714256 !important;
-        font-weight: 500 !important;
-    }
-
-    td button {
-        border: #714256 1px solid !important;
-        border-radius: 3px !important;
-        margin-right: 10px !important;
-        background: rgba(121, 182, 184, 0.5) !important;
-    }
-
-    .delete {
-        padding: 0 7px;
-    }
-
-    .delete:hover {
-        background: rgb(226, 68, 68) !important;
-    }
-
-    td button:hover {
-        border-color: #714256 !important;
-        background: #ef8321 !important;
-        border-radius: 3px;
-    }
-
-    td a {
-        padding: 3px !important;
-    }
-
-    td a:hover {
-        background: #ef8321;
-        color: #714256 !important;
-        border-radius: 3px;
-        padding: 3px;
-    }
-
-    .play-icon {
-        margin-right: 10px;
-    }
-
-    tr {
-        border-top-color: #ef8321 !important;
-    }
-
-    #send-playlist p,
-    #send-playlist h2 {
-        color: #fff;
-        text-align: center;
-    }
-
-    .uk-modal-body {
-        background: #714256;
-    }
-
-    .modal-dragDrop {
-        color: #fff;
-        font-size: 16pt;
-    }
-
-    .uk-modal-body label {
-        color: #fff;
-        font-weight: bold;
-        font-size: 16pt;
-    }
-
-    .uk-modal-body button {
-        background: #79b6b8;
-        border-radius: 3px;
-        font-size: 14pt;
-    }
-
-    .modal-dragDrop button {
-        margin-top: 25px;
-    }
-
-
-    .uk-modal-body button:hover {
-        background: #ef8321;
-    }
-
-    .nub:hover {
-        font-weight: bolder;
-    }
-
-    .card-BG {
-        background: rgba(255, 255, 255, 0.25);
-    }
-
-
-
-    /***** PRICING PAGE *****/
-
-    header {
-        text-align: center;
-        margin-bottom: 25px;
-        padding: 50px 0;
-    }
-
-    header h2 {
-        font-weight: bold;
-        color: #714256;
-        font-size: 36pt;
-    }
-
-    .columns {
-        box-sizing: border-box;
-        float: left;
-        width: 33.3%;
-        padding: 18px;
-    }
-
-    .columns li {
-        background: #fff;
-    }
-
-    .price {
-        list-style-type: none;
-        border: 2px #714256 solid;
-        margin: 0;
-        padding: 0;
-        -webkit-transition: 0.3s;
-        transition: 0.3s;
-    }
-
-    .price:hover {
-        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .price .package {
-        background-color: #714256;
-        border-bottom: #714256;
-        color: #fff;
-        font-size: 25px;
-    }
-
-    .price li {
-        padding: 20px;
-        text-align: center;
-    }
-
-    .price .grey {
-        background-color: #79b6b8;
-        font-size: 20px;
-        font-weight: 500;
-        color: #714256;
-    }
-
-    .button {
-        background-color: #ef8321;
-        border: 1px #714256 solid;
-        border-radius: 5px;
-        color: white;
-        padding: 10px 25px;
-        text-align: center;
-        text-decoration: none;
-        font-size: 18px;
-    }
-
-    a:hover {
-        text-decoration: none;
-        background: #714256;
-        color: #fff;
-    }
-
-    @media only screen and (max-width: 700px) {
-        .columns {
-            width: 100%;
-        }
-    }
-
-
-    /***** CONTACT *****/
-
-    .container {
-        margin: 10px 100px;
-    }
-
-
-    /***** PROFILE *****/
-
-    .uk-card {
-        margin-top: 100px;
-    }
-</style>
 <div class="uk-container">
     <div class="uk-position-top">
         <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
@@ -237,11 +9,8 @@
                         <a href="#">My Account</a>
                         <div class="uk-navbar-dropdown">
                             <ul class="uk-nav uk-navbar-dropdown-nav">
-                                <li class="uk-active">
-                                    <a href="#">Library</a>
-                                </li>
                                 <li>
-                                    <a href="#">Profile</a>
+                                    <a href="/me/profile/{{key}}">Profile</a>
                                 </li>
                             </ul>
                         </div>
@@ -272,7 +41,7 @@
                     <li class="grey">$ 9.99 / year</li>
                     <li>10GB Storage</li>
                     <li class="grey">
-                        <button class="button" type="submit">Sign Up</button>
+                        <button class="button" type="submit" id="paypal-button1"></button>
                     </li>
                 </ul>
             </div>
@@ -286,7 +55,7 @@
                     <li class="grey">$ 24.99 / year</li>
                     <li>25GB Storage</li>
                     <li class="grey">
-                        <button class="button" type="submit">Sign Up</button>
+                        <button class="button" type="submit"  id="paypal-button2"></button>
                     </li>
                 </ul>
             </div>
@@ -301,100 +70,16 @@
                     <li class="grey">$ 49.99 / year</li>
                     <li>50GB Storage</li>
                     <li class="grey">
-                        <button class="button" type="submit">Sign Up</button>
+                        <button class="button" type="submit" id="paypal-button3"></button>
                     </li>
                 </ul>
             </div>
         </form>
-
     </div>
-
-    <div id="paypal-button"></div>
 </div>
 
-
 <script>
-    paypal.Button.render({
-
-        // Set your environment
-
-        env: 'sandbox', // sandbox || production
-
-        // Specify the style of the button
-
-        style: {
-            label: 'pay',
-            fundingicons: true, // optional
-            branding: true, // optional
-            size: 'medium', // small | medium | large | responsive
-            shape: 'pill',   // pill | rect
-            color: 'gold'   // gold | blue | silve | black
-        },
-
-        // PayPal Client IDs - replace with your own
-        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-
-        client: {
-            sandbox: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
-            production: 'AYuEqzJuazUc7_0OXpJ9PG6gvndsAfQ57kmuoAe3bu7hPAwlooT6gr56G28p1iImkgg_gKDl4J3EXnwA'
-        },
-
-        // Wait for the PayPal button to be clicked
-
-        payment: function (data, actions) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: '10.00', currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-        },
-
-        commit: true, // Optional: show a 'Pay Now' button in the checkout flow
-
-        // Wait for the payment to be authorized by the customer
-
-        onAuthorize: function (data, actions) {
-            //console.log(data);
-            //console.log(action);
-            console.log(data.orderID);
-            alert('Thank you for your payment of $10.  Your confirmation number is: ' + data.orderID);
-            // Get the payment details
-
-            return actions.payment.get().then(function (paymentDetails) {
-
-                //console.log(paymentDetails);
-                //console.log(paymentDetails.id);
-
-                // Show a confirmation using the details from paymentDetails
-                // Then listen for a click on your confirm button
-
-                document.querySelector('#confirm-button')
-                    .addEventListener('click', function () {
-
-                        // Execute the payment
-
-                        return actions.payment.execute().then(function () {
-                            alert('Thank you for your payment of $10.00.  Your confirmation number is: ' + paymentDetails.orderID);
-                        });
-                    });
-            });
-
-        },
-
-        onCancel: function (data, actions) {
-            // Show a cancel page or return to cart
-            //console.log(data);
-            //console.log(actions);
-        },
-
-        onError: function (err) {
-            // Show an error page here, when an error occurs
-        }
-
-
-    }, '#paypal-button');
+    key = '{{key}}';
 </script>
+
+
