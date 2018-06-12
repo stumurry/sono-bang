@@ -12,6 +12,11 @@ const keys = require("../keys");
 
 var formidable = require("formidable");
 
+router.get("/thankyou", async (req, res, next) => {
+   res.render("thank-you", {key : req.query.key, confirmation: req.query.paymentId });
+});
+
+
 router.get("/song-upload/", async (req, res, next) => {
   return res.render("song-upload", { key: req.query.key });
 });
@@ -66,11 +71,6 @@ router.get("/:key", async (req, res, next) => {
     console.log(ex);
     return res.redirect("/me/login");
   }
-});
-
-// Require login- change to bearer token within header when time persists
-router.get("/", function(req, res, next) {
-  return res.redirect("/me/login");
 });
 
 // Add song to playlist
@@ -267,10 +267,6 @@ router.get("/pricing/:id", async (req, res, next) => {
   }
 });
 
-router.get("/thankyou", async (req, res, next) => {
-  res.render("thank-you", {key : req.query.key});
-})
-
 // pay the bill
 router.post("/pricing", async (req, res, next) => {
   try {
@@ -296,39 +292,6 @@ router.post("/pricing", async (req, res, next) => {
   }
 });
 
-// router.post("/pricing", async (req, res, next) => {
-//   console.log("deleting song...");
-//   try {
-//     var key = req.headers.authorization;
-//     var _ = composerUtil.decrypt(key);
-
-//     try {
-//       console.log(req.body);
-
-//       res.setHeader("Content-Type", "application/json");
-
-//       //await composerService.RemoveSong({ id: id });
-
-//       res
-//         .status(200)
-//         .send(
-//           JSON.stringify({ message: "Successfully removed file." }, null, 3)
-//         );
-//       // return res.redirect("/composer/" + id);
-//     } catch (ex) {
-//       console.log(ex);
-//       res
-//         .status(400)
-//         .send(JSON.stringify({ error: "Unable to remove song." }, null, 3));
-//       // return res.redirect("/composer/" + id + "?err=UNABLE_TO_DELETE_SONG");
-//     }
-//   } catch (ex) {
-//     console.log("UnAuthenticated");
-//     console.log(ex);
-//     return res.status(401).send({ error: "Unauthenticated" });
-//   }
-// });
-
 router.post("/paypal", async (req, res, next) => {
   console.log(req.body);
 
@@ -352,6 +315,7 @@ router.post("/paypal", async (req, res, next) => {
           JSON.stringify({ message: "Payment Successful." }, null, 3)
         );
 })
+
 
 router.post("/send-playlist", async (req, res, next) => {
   try {
@@ -380,6 +344,11 @@ router.post("/send-playlist", async (req, res, next) => {
     console.log("redirecting to login");
     return res.redirect("/me/login");
   }
+});
+
+// Require login- change to bearer token within header when time persists
+router.get("/", function(req, res, next) {
+  return res.redirect("/me/login");
 });
 
 module.exports = router;
