@@ -280,3 +280,16 @@ strong {
 .center {
     text-align: center;
 }
+
+.composer-audio {
+    padding-top : 25px;
+
+}
+
+.playlist-audio {
+    padding-top : 25px;
+}
+
+.uk-open {
+    width : 100%;
+}

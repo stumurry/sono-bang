@@ -62,7 +62,7 @@
                             </td>
                             <td>{{ genre }}</td>
                             <td uk-margin>
-                                <audio controls>
+                                <audio controls  class="composer-audio">
                                     <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
                                 </audio>
                             </td>
@@ -70,7 +70,7 @@
                                 <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-song-to-playlist" uk-toggle='target:#add-song-to-playlist'
                                     type="button">Add to Playlist</button>
                                 <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" uk-toggle='target:#delete-song'
-                                    type="button">X</button>
+                                    type="button">Delete</button>
                             </td>
                         </tr>
                         {{/each}}
@@ -103,7 +103,11 @@
                             <a class="uk-accordion-title" href="#">{{name}}</a>
                             <div class="uk-accordion-content">
                                 {{#each songs}}
-                                <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p>
+                                <a href="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}">{{ name }}</a>
+                                {{!-- <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p> --}}
+                                <audio controls class="playlist-audio">
+                                    <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
+                                </audio>
                                 <button song-id="{{id}}" playlist-id="{{playlistId}}" class="uk-button uk-button-default uk-button-small remove-song-from-playlist" type="button">x</button>
                                 {{/each}}
                             </div>
@@ -115,7 +119,7 @@
                             {{!--
                             <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button> --}}
                             <button class="uk-button uk-button-default uk-button-small delete-playlist" playlist-id="{{id}}" playlist-title="{{name}}"
-                                uk-toggle='target:#delete-playlist' type="button">X</button>
+                                uk-toggle='target:#delete-playlist' type="button">Delete</button>
                         </td>
                     </tr>
                     {{/each}}
