@@ -42,7 +42,7 @@
               }
             ],
             redirect_urls: {
-              return_url: "//composer/thankyou?key=" + key
+              return_url: "https://sonobang.herokuapp.com/composer/thankyou?key=" + key
               //cancel_url: 'https://example.com'
             }
           }
@@ -55,7 +55,7 @@
 
       onAuthorize: function(data, actions) {
         return actions.payment.get().then(function(paymentDetails) {
-          $.post("//composer/pricing", { key: key, price: p.price }).done(function(data) {
+          $.post("/composer/pricing", { key: key, price: p.price }).done(function(data) {
             console.log(paymentDetails);
             actions.redirect();
           });
