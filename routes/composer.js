@@ -271,65 +271,79 @@ router.get("/thankyou", async (req, res, next) => {
   res.render("thank-you", {key : req.query.key});
 })
 
-// // pay the bill
-// router.post("/pricing", async (req, res, next) => {
-//   try {
-//     var key = req.body.key;
-//     k = composerUtil.decrypt(key);
-//     try {
-//       var updatedKey = await composerService.UpdatePayment(k.composer);
-//       return res.render("thank-you", { key: updatedKey });
-//     } catch (ex) {
-//       console.log("Error updating payment information.");
-//       console.log(ex);
-//       return res.render("composer-pricing", {
-//         key: key,
-//         error:
-//           "Unable to update payment information.  Please contact Sonobang for more details."
-//       });
-//     }
-//   } catch (ex) {
-//     console.log(ex);
-//     console.log("redirecting to login");
-//     return res.redirect("/me/login");
-//   }
-// });
-
+// pay the bill
 router.post("/pricing", async (req, res, next) => {
-  console.log("deleting song...");
   try {
-    var key = req.headers.authorization;
-    var _ = composerUtil.decrypt(key);
-
+    var key = req.body.key;
+    k = composerUtil.decrypt(key);
     try {
-      console.log(req.body);
-
-      res.setHeader("Content-Type", "application/json");
-
-      //await composerService.RemoveSong({ id: id });
-
-      res
-        .status(200)
-        .send(
-          JSON.stringify({ message: "Successfully removed file." }, null, 3)
-        );
-      // return res.redirect("/composer/" + id);
+      var updatedKey = await composerService.UpdatePayment(k.composer);
+      return res.render("thank-you", { key: updatedKey });
     } catch (ex) {
+      console.log("Error updating payment information.");
       console.log(ex);
-      res
-        .status(400)
-        .send(JSON.stringify({ error: "Unable to remove song." }, null, 3));
-      // return res.redirect("/composer/" + id + "?err=UNABLE_TO_DELETE_SONG");
+      return res.render("composer-pricing", {
+        key: key,
+        error:
+          "Unable to update payment information.  Please contact Sonobang for more details."
+      });
     }
   } catch (ex) {
-    console.log("UnAuthenticated");
     console.log(ex);
-    return res.status(401).send({ error: "Unauthenticated" });
+    console.log("redirecting to login");
+    return res.redirect("/me/login");
   }
 });
 
+// router.post("/pricing", async (req, res, next) => {
+//   console.log("deleting song...");
+//   try {
+//     var key = req.headers.authorization;
+//     var _ = composerUtil.decrypt(key);
+
+//     try {
+//       console.log(req.body);
+
+//       res.setHeader("Content-Type", "application/json");
+
+//       //await composerService.RemoveSong({ id: id });
+
+//       res
+//         .status(200)
+//         .send(
+//           JSON.stringify({ message: "Successfully removed file." }, null, 3)
+//         );
+//       // return res.redirect("/composer/" + id);
+//     } catch (ex) {
+//       console.log(ex);
+//       res
+//         .status(400)
+//         .send(JSON.stringify({ error: "Unable to remove song." }, null, 3));
+//       // return res.redirect("/composer/" + id + "?err=UNABLE_TO_DELETE_SONG");
+//     }
+//   } catch (ex) {
+//     console.log("UnAuthenticated");
+//     console.log(ex);
+//     return res.status(401).send({ error: "Unauthenticated" });
+//   }
+// });
+
 router.post("/paypal", async (req, res, next) => {
   console.log(req.body);
+
+  switch(req.body.event_type) {
+    case 'PAYMENT.SALE.COMPLETED':
+        console.log('Payment Sale Completed...')
+        
+        break;
+    case n:
+        
+        break;
+    default:
+        
+}
+
+
   res.setHeader("Content-Type", "application/json");
   res
         .status(200)
