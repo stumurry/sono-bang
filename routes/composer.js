@@ -274,6 +274,7 @@ router.get("/thankyou", async (req, res, next) => {
 // pay the bill
 router.post("/pricing", async (req, res, next) => {
   try {
+    console.log(req.body)
     var key = req.body.key;
     k = composerUtil.decrypt(key);
     try {
