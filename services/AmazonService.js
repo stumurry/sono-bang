@@ -9,6 +9,7 @@ AWS.config.update({
 });
 
 var s3 = new AWS.S3();
+var ses = new AWS.SES( { region : 'us-east-1' });
 var fs = require("fs");
 const path = require("path");
 
@@ -78,5 +79,41 @@ module.exports = {
 
     return resp.Contents.map(d => parseFloat(d.Size)).reduce((acc, curr) => acc + curr);
 
+  },
+  SendEmail : async (to, subject, body) => {
+    var params = {
+      Destination: { /* required */
+        ToAddresses: [to]
+      },
+      Message: { /* required */
+        Body: {
+          
+          Html: {
+            Charset: 'UTF-8',
+            Data:
+              'This message body contains HTML formatting, like <a class="ulink" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide" target="_blank">Amazon SES Developer Guide</a>.'
+          },
+          Text: {
+            Charset: 'UTF-8',
+            Data: 'This is the message body in text format.'
+          }
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Test email from code'
+        }
+      },
+      ReturnPath: 'ericminson01@gmail.com',
+      Source: 'ericminson01@gmail.com'
+    };
+    await ses.sendEmail(params, function(err, data) {
+      if (err) console.log(err, err.stack); // an error occurred
+      else     console.log(data);           // successful response
+      /*
+      data = {
+       MessageId: "EXAMPLE78603177f-7a5433e7-8edb-42ae-af10-f0181f34d6ee-000000"
+      }
+      */
+    }).promise();
   }
 };

@@ -1,6 +1,63 @@
 // Using Jquery until we go into Angular or React.
 $(document).ready(() => {
 
+    $('.play-button').on('click', (evt) => {
+        var component = $(evt.target);
+        var audioComponent = component.parent().children('audio')[0];
+        audioComponent.play();
+        component.addClass('hidden');
+        component.parent().children('.pause-button').removeClass('hidden');;
+
+    });
+
+    $('.pause-button').on('click', (evt) => {
+        var component = $(evt.target);
+        var audioComponent = component.parent().children('audio')[0];
+        audioComponent.pause();
+        component.addClass('hidden');
+        component.parent().children('.play-button').removeClass('hidden');
+    });
+
+    $('.restart').on('click', (evt) => {
+        var component = $(evt.target);
+        var parent = component.parent().parent().parent().parent().parent();
+        var row = parent.children('td').first();
+        var audioComponent = row.children('audio')[0];
+        
+
+        console.log(row.children('.play-button'));
+        row.children('.play-button').removeClass('hidden');
+        row.children('.play-button').addClass('hidden');
+        row.children('.pause-button').removeClass('hidden');
+
+
+        audioComponent.pause();
+        audioComponent.currentTime = 0;
+        audioComponent.play();
+        
+    });
+
+    $('.restart-icon').on('click', (evt) => {
+        var component = $(evt.target);
+        var parent = component.parent().parent();
+        console.log(parent);
+        
+        var row = parent.children('div').first();
+        var audioComponent = row.children('audio')[0];
+        
+
+        console.log(row.children('.play-button'));
+        row.children('.play-button').removeClass('hidden');
+        row.children('.play-button').addClass('hidden');
+        row.children('.pause-button').removeClass('hidden');
+
+
+        audioComponent.pause();
+        audioComponent.currentTime = 0;
+        audioComponent.play();
+        
+    });
+
     
 
     $('.remove-song-from-playlist').on('click', (evt) => {

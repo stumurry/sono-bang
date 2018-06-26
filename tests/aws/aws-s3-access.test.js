@@ -5,9 +5,10 @@ describe("AWS", function() {
     it("should list bucket contents", function(done) {
       // testDeleteBucketContents()
       // testGetFiles()
-      testListAllFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
+      //testListAllFiles() // make sure this method excutes and not the others otherwise, a whole lot unnecessary uploads.
       // testUploadFile()
       // listLocalFilesFromDirectory()
+      testEmail()
       // testCORS('sonobang-test')
         .then(_ => console.log(_))
         .then(_ => done())
@@ -15,6 +16,10 @@ describe("AWS", function() {
     });
   });
 });
+
+async function testEmail() {
+    await aws.SendEmail('stu@stumurry.com','Test', 'Hello World');
+}
 
 async function testCORS() {
   var cors = await aws.GetCORS(keys.aws.BUCKET);

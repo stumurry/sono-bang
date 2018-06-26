@@ -290,3 +290,17 @@ strong {
     padding-top : 25px;
 }
 
+
+
+.play-button {
+    
+}
+
+.play-button-style {
+    height:30px;
+    width:30px;
+}
+
+.hidden {
+    display :none;
+}

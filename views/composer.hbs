@@ -57,20 +57,27 @@
                     <tbody>
                         {{#each songs}}
                         <tr>
+
                             <td>
+                                <img src="../images/pause-icon.png" class="play-button-style pause-button hidden" >
+                                <img src="../images/play-icon.png" class="play-button-style play-button" >
                                 <a href="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}">{{ name }}</a>
+                                <audio controls  class="composer-audio" style="display: none">
+                                    <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
+                                </audio> 
                             </td>
                             <td>{{ genre }}</td>
-                            <td uk-margin>
-                                <audio controls  class="composer-audio">
-                                    <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
-                                </audio>
-                            </td>
                             <td>
-                                <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-song-to-playlist" uk-toggle='target:#add-song-to-playlist'
-                                    type="button">Add to Playlist</button>
-                                <button song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" uk-toggle='target:#delete-song'
-                                    type="button">Delete</button>
+                                <button class="uk-button uk-button-default" type="button">...</button>
+                                <div uk-dropdown>
+                                    <ul class="uk-nav uk-dropdown-nav">
+                                        <li><a href="javascript:void(0)" song-title="{{name}}" song-id="{{id}}" class="add-song-to-playlist"  uk-toggle="target:#add-song-to-playlist">Add to Playlist</a></li>
+                                        <li class="uk-nav-divider"></li>
+                                        <li><a class="restart" href="javascript:void(0)">Restart</a></li>
+                                        <li class="uk-nav-divider"></li>
+                                        <li><a href="javascript:void(0)"  song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" uk-toggle='target:#delete-song'>Delete</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                         {{/each}}
@@ -99,27 +106,40 @@
 
                     {{#each playlists}}
                     <tr uk-accordion>
-                        <td class="uk-closed">
+                        <td class="uk-closed uk-width-1-1">
                             <a class="uk-accordion-title" href="#">{{name}}</a>
                             <div class="uk-accordion-content">
                                 {{#each songs}}
-                                <a href="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}">{{ name }}</a>
-                                {{!-- <span uk-icon="play-circle" class="play-icon"></span>{{name}}</p> --}}
-                                <audio controls class="playlist-audio">
-                                    <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
-                                </audio>
-                                <button song-id="{{id}}" playlist-id="{{playlistId}}" class="uk-button uk-button-default uk-button-small remove-song-from-playlist" type="button">x</button>
+                                <div class="uk-child-width-expand" uk-grid>
+                                    <div>
+                                        <img src="../images/pause-icon.png" class="play-button-style pause-button hidden" >
+                                        <img src="../images/play-icon.png" class="play-button-style play-button" >
+                                        <audio controls  class="composer-audio" style="display: none">
+                                            <source src="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}" type="audio/mpeg"> Your browser does not support the audio element.
+                                        </audio> 
+                                    </div>
+                                    <div>
+                                        <a href="https://s3-us-west-1.amazonaws.com/sonobang-test/{{key}}">{{ name }}</a>
+                                    </div>
+                                    <div>
+                                        <img src="../images/replay-icon.png" class="play-button-style restart-icon" >
+                                        <button song-id="{{id}}" playlist-id="{{playlistId}}" class="uk-button uk-button-default uk-button-small remove-song-from-playlist" type="button">X</button></div>
+                                    </div>
                                 {{/each}}
                             </div>
                         </td>
                         <td>{{genre}}</td>
-                        <td uk-margin>
-                            <button class="uk-button uk-button-default uk-button-small send-playlist" public-key="{{publickey}}" playlist-id="{{id}}"
-                                playlist-title="{{name}}" type="button" uk-toggle='target:#send-playlist'>Send</button>
-                            {{!--
-                            <button class="uk-button uk-button-default uk-button-small" type="button">Edit</button> --}}
-                            <button class="uk-button uk-button-default uk-button-small delete-playlist" playlist-id="{{id}}" playlist-title="{{name}}"
-                                uk-toggle='target:#delete-playlist' type="button">Delete</button>
+                        <td>
+                            <button class="uk-button uk-button-default" type="button">...</button>
+                                <div uk-dropdown>
+                                    <ul class="uk-nav uk-dropdown-nav">
+                                        <li><a href="javascript:void(0)" song-title="{{name}}" song-id="{{id}}" class="add-song-to-playlist"  uk-toggle="target:#add-song-to-playlist">Add to Playlist</a></li>
+                                        <li><a class="delete-playlist" href="javascript:void(0)" playlist-id="{{id}}" playlist-title="{{name}}"
+                                            uk-toggle='target:#delete-playlist' >Delete Playlist</a></li>
+                                        <li><a href="javascript:void(0)" class="uk-button uk-button-default uk-button-small send-playlist" public-key="{{publickey}}" playlist-id="{{id}}"
+                                            playlist-title="{{name}}" uk-toggle='target:#send-playlist'></a></li>
+                                    </ul>
+                                </div>
                         </td>
                     </tr>
                     {{/each}}
