@@ -71,11 +71,11 @@
                                 <button class="uk-button uk-button-default" type="button">...</button>
                                 <div uk-dropdown>
                                     <ul class="uk-nav uk-dropdown-nav">
-                                        <li><a href="javascript:void(0)" song-title="{{name}}" song-id="{{id}}" class="add-song-to-playlist"  uk-toggle="target:#add-song-to-playlist">Add to Playlist</a></li>
+                                        <li><a href="javascript:void(0)" song-title="{{name}}" song-id="{{id}}" class="uk-button uk-button-default uk-button-small add-song-to-playlist"  uk-toggle="target:#add-song-to-playlist">Add Song</a></li>
                                         <li class="uk-nav-divider"></li>
                                         <li><a class="restart" href="javascript:void(0)">Restart</a></li>
                                         <li class="uk-nav-divider"></li>
-                                        <li><a href="javascript:void(0)"  song-id="{{id}}" class="uk-button uk-button-default uk-button-small delete-song" uk-toggle='target:#delete-song'>Delete</a></li>
+                                        <li><a href="javascript:void(0)"  song-id="{{id}}" class="delete-song" uk-toggle='target:#delete-song'>Delete</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -133,11 +133,10 @@
                             <button class="uk-button uk-button-default" type="button">...</button>
                                 <div uk-dropdown>
                                     <ul class="uk-nav uk-dropdown-nav">
-                                        <li><a href="javascript:void(0)" song-title="{{name}}" song-id="{{id}}" class="add-song-to-playlist"  uk-toggle="target:#add-song-to-playlist">Add to Playlist</a></li>
-                                        <li><a class="delete-playlist" href="javascript:void(0)" playlist-id="{{id}}" playlist-title="{{name}}"
-                                            uk-toggle='target:#delete-playlist' >Delete Playlist</a></li>
                                         <li><a href="javascript:void(0)" class="uk-button uk-button-default uk-button-small send-playlist" public-key="{{publickey}}" playlist-id="{{id}}"
-                                            playlist-title="{{name}}" uk-toggle='target:#send-playlist'></a></li>
+                                            playlist-title="{{name}}" uk-toggle='target:#send-playlist'>Send</a></li>
+                                        <li><a class="delete-playlist" href="javascript:void(0)" playlist-id="{{id}}" playlist-title="{{name}}"
+                                            uk-toggle='target:#delete-playlist'>Delete Playlist</a></li>
                                     </ul>
                                 </div>
                         </td>
