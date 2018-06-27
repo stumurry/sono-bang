@@ -1,38 +1,34 @@
 var nodemailer = require("nodemailer");
 var handlebars = require("handlebars");
 var fs = require("fs");
-
-var transporter = nodemailer.createTransport({
-    host: 'stumurry-com.mail.protection.outlook.com',
-    port: 25,
-    secure: false, // upgrade later with STARTTLS
-    auth: {
-        user: 'stu@stumurry.com',
-        pass: 'stuart!2345'
-    },            
-            // authMethod:'NTLM',
-            secure:false,
-            // tls: {rejectUnauthorized: false},
-            debug:true
-});
+const aws = require("../services/AmazonService");
+var keys = require('../keys');
 
 var emailer = {
-  sendEmail: function(templatePath) {
+  sendEmail: async function(email, templatePath, data) {
+
+    // console.log('html');
+    // console.log(JSON.stringify(data));
+
+    // Grab html template from file and place data.
     var htmlData = fs.readFileSync(templatePath, { encoding: "utf-8" });
+
     var template = handlebars.compile(htmlData);
-    if (template != undefined) console.log(template);
-    else console.log("nothing in here");
+    
+    var tmpl = template(data);
+
+    var str = tmpl.replace(/(?:\r\n|\r|\n)/g, '');
+
+    
+    // if (template != undefined) console.log(template);
+    // else console.log("nothing in here");
     const mailOptions = {
-      from: "noreply@stumurry.com", // sender address
-      to: "stu@stumurry.com", // list of receivers
+      to: email, // list of receivers
       subject: "A SONOBANG composer would like you to listen!", // Subject line
-      html: htmlData
+      html: str
     };
 
-    transporter.sendMail(mailOptions, function(err, info) {
-      if (err) console.log(err);
-      else console.log(info);
-    });
+     await aws.SendEmail(mailOptions.to, mailOptions.subject, mailOptions.html);
   }
 };
 

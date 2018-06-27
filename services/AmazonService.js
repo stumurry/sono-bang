@@ -81,6 +81,7 @@ module.exports = {
 
   },
   SendEmail : async (to, subject, body) => {
+
     var params = {
       Destination: { /* required */
         ToAddresses: [to]
@@ -90,22 +91,24 @@ module.exports = {
           
           Html: {
             Charset: 'UTF-8',
-            Data:
-              'This message body contains HTML formatting, like <a class="ulink" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide" target="_blank">Amazon SES Developer Guide</a>.'
+            Data : JSON.stringify(body),
+            // Data:
+            //   'This message body contains HTML formatting, like <a class="ulink" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide" target="_blank">Amazon SES Developer Guide</a>.'
           },
           Text: {
             Charset: 'UTF-8',
-            Data: 'This is the message body in text format.'
+            Data: 'This message body contains HTML formatting, like <a class="ulink" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide" target="_blank">Amazon SES Developer Guide</a>.'
           }
         },
         Subject: {
           Charset: 'UTF-8',
-          Data: 'Test email from code'
+          Data: subject
         }
       },
       ReturnPath: 'ericminson01@gmail.com',
       Source: 'ericminson01@gmail.com'
     };
+
     await ses.sendEmail(params, function(err, data) {
       if (err) console.log(err, err.stack); // an error occurred
       else     console.log(data);           // successful response

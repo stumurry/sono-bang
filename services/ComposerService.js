@@ -191,15 +191,34 @@ module.exports = {
     }
   },
 
-  SendPlaylist : async (playlistId) => {
-    console.log('Sending Playlist');
-    console.log(__dirname);
+  SendPlaylist : async (email, playlistId, fullName) => {
+    // console.log('Sending Playlist');
+    // console.log(__dirname);
     var l = await db.playlistsongs.findAll({ where: { playlist_id: playlistId } });
     var songIds = l.map(pls => pls.song_id);
     var songsInPlaylist = await db.songs.findAll({ where: { id: { [Op.in] : songIds } } });
 
-    
-    emailer.sendEmail(__dirname + '/../utils/temp.html', songsInPlaylist);
+    // console.log('songsInPlaylist');
+    // console.log(songsInPlaylist)
+
+    var refined = songsInPlaylist.map(s => s.dataValues );
+
+    // console.log('refined');
+    // console.log(refined)
+
+
+    var data = { playlists : refined, FullName :  fullName };
+
+    // console.log('data');
+    // console.log(data);
+
+    var p = __dirname + '/../utils/temp.html';
+
+    // console.log('p');
+    // console.log(p);
+
+    await emailer.sendEmail(email, p , data);
+
   },
 
   GetPlaylistKey : (playlist) => {

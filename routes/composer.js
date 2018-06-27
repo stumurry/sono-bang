@@ -130,6 +130,7 @@ router.post("/playlist", (req, res, next) => {
     });
 });
 
+// Upload song
 router.post("/song", async (req, res, next) => {
   var form = new formidable.IncomingForm();
 
@@ -156,6 +157,7 @@ async function ProcessFileUploadForm(fields, ffff) {
   await composerService.AddSongToComposer(_.composer, ffff.path);
 }
 
+// Delete Song
 router.delete("/song/:id", async (req, res, next) => {
   console.log("deleting song...");
   try {
@@ -187,6 +189,7 @@ router.delete("/song/:id", async (req, res, next) => {
   }
 });
 
+// Delete Playlist
 router.delete("/playlist/:id", async (req, res, next) => {
   console.log("deleting playlist...");
   try {
@@ -220,6 +223,7 @@ router.delete("/playlist/:id", async (req, res, next) => {
   }
 });
 
+// Delete Song
 router.delete("/playlist/:playlistId/song/:songId", async (req, res, next) => {
   console.log("deleting playlist/ song...");
   try {
@@ -305,7 +309,7 @@ router.post("/paypal", async (req, res, next) => {
         break;
     default:
         
-}
+  }
 
 
   res.setHeader("Content-Type", "application/json");
@@ -316,16 +320,21 @@ router.post("/paypal", async (req, res, next) => {
         );
 })
 
-
+// Send playlist to email receipient
 router.post("/send-playlist", async (req, res, next) => {
   try {
     var key = req.body.key;
+    var email = req.body.email;
     k = composerUtil.decrypt(key);
+
+    console.log(k);
+
+    var name = k.user.name;
     try {
 
       var playlistId = req.body.playlistId;
 
-      await composerService.SendPlaylist(playlistId);
+      await composerService.SendPlaylist(email, playlistId, name);
 
     } catch (ex) {
       console.log("Error sending email.");
