@@ -324,17 +324,34 @@ router.post("/paypal", async (req, res, next) => {
 router.post("/send-playlist", async (req, res, next) => {
   try {
     var key = req.body.key;
+    var link = req.body.publicKey;
     var email = req.body.email;
     k = composerUtil.decrypt(key);
 
-    console.log(k);
+    // console.log(k);
 
     var name = k.user.name;
     try {
 
       var playlistId = req.body.playlistId;
 
-      await composerService.SendPlaylist(email, playlistId, name);
+      console.log('link');
+      console.log(req.body);
+
+      var hostName = req.body.hostname;
+      var port = req.body.port;
+      var protocol = req.body.protocol;
+
+      var link = '';
+      if (port || port != '80') {
+        link = protocol + '//' + hostName + ':' + port + '/producer/?key=' + req.body.publicKey;
+      } else {
+        link = protocol + '//' + hostName + '/producer/?key=' + req.body.publicKey;
+      }
+
+      console.log(link);
+
+      await composerService.SendPlaylist(email, playlistId, name, link);
 
     } catch (ex) {
       console.log("Error sending email.");

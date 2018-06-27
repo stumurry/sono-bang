@@ -88,8 +88,12 @@ $(document).ready(() => {
         var url = '<a href="/producer/?key=' + publicKey +'">Click Here</a>'
 
         $('#public-key').html(url);
+        $('#public-key2').val(publicKey);
         $('#playlist-title').html(playlistTitle);
         $('#playlist-id').val(playlistId);
+        $('#hostname').val(window.location.hostname);
+        $('#port').val(window.location.port);
+        $('#protocol').val(window.location.protocol);
 
     });
 

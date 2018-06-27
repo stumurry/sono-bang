@@ -178,6 +178,10 @@
         <form action="/composer/send-playlist/" method="post" class="uk-form-stacked">
             <input id="playlist-id" type="hidden" name="playlistId">
             <input type="hidden" name="key" value="{{key}}">
+            <input id="public-key2" type="hidden" name="publicKey">
+            <input id="hostname" type="hidden" name="hostname">
+            <input id="port" type="hidden" name="port">
+            <input id="protocol" type="hidden" name="protocol">
 
             <h2>Send Playlist</h2>
 
@@ -191,12 +195,9 @@
                 <button>Submit</button>
             </div>
 
-
             <h2>Or copy this hyperlink</h2>
             <p id="public-key"></p>
 
-            {{!--
-            <button class="uk-button uk-button-default uk-button-large save-song-to-playlist" type="submit">Send Email</button> --}}
         </form>
     </div>
 </div>

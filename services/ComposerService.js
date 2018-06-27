@@ -191,7 +191,7 @@ module.exports = {
     }
   },
 
-  SendPlaylist : async (email, playlistId, fullName) => {
+  SendPlaylist : async (email, playlistId, fullName, link) => {
     // console.log('Sending Playlist');
     // console.log(__dirname);
     var l = await db.playlistsongs.findAll({ where: { playlist_id: playlistId } });
@@ -207,7 +207,7 @@ module.exports = {
     // console.log(refined)
 
 
-    var data = { playlists : refined, FullName :  fullName };
+    var data = { playlists : refined, FullName :  fullName, link : link };
 
     // console.log('data');
     // console.log(data);

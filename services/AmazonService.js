@@ -91,7 +91,7 @@ module.exports = {
           
           Html: {
             Charset: 'UTF-8',
-            Data : JSON.stringify(body),
+            Data : body,
             // Data:
             //   'This message body contains HTML formatting, like <a class="ulink" href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide" target="_blank">Amazon SES Developer Guide</a>.'
           },

@@ -1,16 +1,50 @@
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td align="center">
-                <h1>Sonobang</h1>
-                <p>{{FullName}} has sent you the following songs for your review. </p>
-                <div class="row">
-                    {{#each playlists}}
-                    <div class="flex-item">{{name}}</div>
-                    {{/each}}
-                </div>
-            
-            
-                <a href="#">Click Here</a> to review or download this Composer's track.
-        </td>
-    </tr>
-</table>
+<html>
+
+<head>
+
+    <title>Example document</title>
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: DodgerBlue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- <h1>Sonobang</h1>
+    <p>{{FullName}} has sent you the following songs for your review. </p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+        {{#each playlists}}
+        <tr>
+
+            <td>
+                {{name}}
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+
+    Click or copy link to review or download this Composer's track.
+    <a href="{{link}}">{{link}}</a> -->
+
+    <h1>Music Playlist</h1>
+
+    <p>{{name}} has sent you their playlist for your review. </p>
+
+    <div class="flex-container">
+            {{#each playlists}}
+            <div>{{name}}</div>
+            {{/each}}
+    </div>
+
+    Please <a href="{{link}}">click here</a> to listen to his music.
+
+</body>
+
+</html>
