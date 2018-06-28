@@ -1,8 +1,6 @@
 <html>
 
 <head>
-
-    <title>Example document</title>
     <style>
         .flex-container {
             display: flex;
@@ -11,39 +9,35 @@
             height: 300px;
             background-color: DodgerBlue;
         }
-    </style>
 
+        ul li {
+            display: inline;
+            list-style-type: none;
+        }
+
+        .name-label {
+            font-size: 18pt;
+
+        }
+    </style>
 </head>
 
 <body>
-    <!-- <h1>Sonobang</h1>
-    <p>{{FullName}} has sent you the following songs for your review. </p>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <h1>Sonobang! Music Playlist</h1>
 
-        {{#each playlists}}
-        <tr>
-
-            <td>
-                {{name}}
-            </td>
-        </tr>
-        {{/each}}
-    </table>
-
-    Click or copy link to review or download this Composer's track.
-    <a href="{{link}}">{{link}}</a> -->
-
-    <h1>Music Playlist</h1>
-
-    <p>{{name}} has sent you their playlist for your review. </p>
-
+    <p>
+        <strong>{{FullName}}</strong>, compiled a playlist for your review. </p>
     <div class="flex-container">
+        <div>
             {{#each playlists}}
-            <div>{{name}}</div>
-            {{/each}}
+            <span class="name-label">{{name}}</span>
+            <br> {{/each}}
+        </div>
     </div>
+    Please
+    <a href="{{link}}">click here</a> to listen to his work.
 
-    Please <a href="{{link}}">click here</a> to listen to his music.
+
 
 </body>
 

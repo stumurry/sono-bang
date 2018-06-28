@@ -209,8 +209,8 @@ module.exports = {
 
     var data = { playlists : refined, FullName :  fullName, link : link };
 
-    // console.log('data');
-    // console.log(data);
+    console.log('data');
+    console.log(data);
 
     var p = __dirname + '/../utils/temp.html';
 
